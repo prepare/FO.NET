@@ -1,5 +1,8 @@
 # FO.NET
 
-I forked it from from http://fonet.codeplex.com/
+I forked this from http://fonet.codeplex.com/
 
-Apache2 license
+license: Apache2
+
+wiki: https://github.com/prepare/FO.NET/wiki/1)-XSL-FO
+
