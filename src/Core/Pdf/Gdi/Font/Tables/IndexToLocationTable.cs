@@ -2,14 +2,16 @@
 //Apache2, 2009, griffm, FO.NET
 using System.Collections;
 
-namespace Fonet.Pdf.Gdi.Font {
+namespace Fonet.Pdf.Gdi.Font
+{
     /// <summary>
     ///     Class that represents the Index To Location ('loca') table.
     /// </summary>
     /// <remarks>
     ///     http://www.microsoft.com/typography/otspec/loca.htm
     /// </remarks>
-    internal class IndexToLocationTable : FontTable {
+    internal class IndexToLocationTable : FontTable
+    {
         private IList offsets;
 
         /// <summary>
@@ -18,14 +20,15 @@ namespace Fonet.Pdf.Gdi.Font {
         /// </summary>
         /// <param name="entry"></param>
         public IndexToLocationTable(DirectoryEntry entry)
-            : base(TableNames.Loca, entry) {}
+            : base(TableNames.Loca, entry) { }
 
         /// <summary>
         ///     Initialises a new instance of the IndexToLocationTable class.
         /// </summary>
         /// <param name="entry"></param>
         public IndexToLocationTable(DirectoryEntry entry, int numOffsets)
-            : base(TableNames.Loca, entry) {
+            : base(TableNames.Loca, entry)
+        {
             this.offsets = new ArrayList(numOffsets);
         }
 
@@ -34,7 +37,8 @@ namespace Fonet.Pdf.Gdi.Font {
         ///     at the current position.
         /// </summary>
         /// <param name="reader"></param>
-        protected internal override void Read(FontFileReader reader) {
+        protected internal override void Read(FontFileReader reader)
+        {
             FontFileStream stream = reader.Stream;
 
             // Glyph offsets can be stored in either short of long format
@@ -44,14 +48,17 @@ namespace Fonet.Pdf.Gdi.Font {
             int glyphCount = reader.GetMaximumProfileTable().GlyphCount + 1;
 
             offsets = new ArrayList(glyphCount);
-            for (int i = 0; i < glyphCount; i++) {
-                offsets.Insert(i, (isShortFormat) ? (uint) (stream.ReadUShort() << 1) : stream.ReadULong());
+            for (int i = 0; i < glyphCount; i++)
+            {
+                offsets.Insert(i, (isShortFormat) ? (uint)(stream.ReadUShort() << 1) : stream.ReadULong());
             }
         }
 
-        protected internal override void Write(FontFileWriter writer) {
+        protected internal override void Write(FontFileWriter writer)
+        {
             // TODO: Determine short/long format
-            foreach (uint offset in offsets) {
+            foreach (uint offset in offsets)
+            {
                 writer.Stream.WriteULong(offset);
             }
         }
@@ -59,7 +66,8 @@ namespace Fonet.Pdf.Gdi.Font {
         /// <summary>
         ///     Removes all offsets.
         /// </summary>
-        public void Clear() {
+        public void Clear()
+        {
             offsets.Clear();
         }
 
@@ -67,14 +75,16 @@ namespace Fonet.Pdf.Gdi.Font {
         ///     Includes the supplied offset.
         /// </summary>
         /// <param name="offset"></param>
-        public void AddOffset(uint offset) {
+        public void AddOffset(uint offset)
+        {
             offsets.Add(offset);
         }
 
         /// <summary>
         ///     Gets the number of glyph offsets.
         /// </summary>
-        public int Count {
+        public int Count
+        {
             get { return offsets.Count; }
         }
 
@@ -83,8 +93,9 @@ namespace Fonet.Pdf.Gdi.Font {
         /// </summary>
         /// <param name="index">A glyph index.</param>
         /// <returns></returns>
-        public uint this[int index] {
-            get { return (uint) offsets[index]; }
+        public uint this[int index]
+        {
+            get { return (uint)offsets[index]; }
             set { offsets.Insert(index, value); }
         }
     }

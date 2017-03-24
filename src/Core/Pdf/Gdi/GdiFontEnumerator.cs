@@ -3,11 +3,13 @@
 using System;
 using System.Collections;
 
-namespace Fonet.Pdf.Gdi {
+namespace Fonet.Pdf.Gdi
+{
     /// <summary>
     ///     Summary description for GdiFontEnumerator.
     /// </summary>
-    public class GdiFontEnumerator {
+    public class GdiFontEnumerator
+    {
         private const int RasterFont = 0x001;
         private const int DeviceFont = 0x002;
         private const int TrueTypeFont = 0x004;
@@ -27,22 +29,25 @@ namespace Fonet.Pdf.Gdi {
         ///     Class constructor.
         /// </summary>
         /// <param name="dc">A non-null reference to a wrapper around a GDI device context.</param>
-        public GdiFontEnumerator(GdiDeviceContent dc) {
+        public GdiFontEnumerator(GdiDeviceContent dc)
+        {
             this.dc = dc;
         }
 
         /// <summary>
         ///     Returns a list of font family names sorted in ascending order.
         /// </summary>
-        public string[] FamilyNames {
-            get {
+        public string[] FamilyNames
+        {
+            get
+            {
                 LogFont lf = new LogFont();
                 lf.lfCharSet = DefaultCharset;
 
                 FontEnumDelegate font = new FontEnumDelegate(EnumFontMethod);
                 LibWrapper.EnumFontFamiliesEx(dc.Handle, lf, font, ExtractFamilies, 0);
 
-                return (string[]) new ArrayList(families.Keys).ToArray(typeof (string));
+                return (string[])new ArrayList(families.Keys).ToArray(typeof(string));
             }
         }
 
@@ -51,7 +56,8 @@ namespace Fonet.Pdf.Gdi {
         /// </summary>
         /// <param name="familyName"></param>
         /// <returns></returns>
-        public FontStyles GetStyles(string familyName) {
+        public FontStyles GetStyles(string familyName)
+        {
             styles.Clear();
             FontEnumDelegate font = new FontEnumDelegate(EnumFontMethod);
             LibWrapper.EnumFontFamilies(dc.Handle, familyName, font, ExtractStyles);
@@ -63,22 +69,29 @@ namespace Fonet.Pdf.Gdi {
             ref EnumLogFont logFont,
             ref NewTextMetric textMetric,
             uint fontType,
-            int lParam) {
+            int lParam)
+        {
             // Only interested in TrueType fonts
-            if ((fontType & TrueTypeFont) > 0) {
-                if (lParam == ExtractFamilies) {
+            if ((fontType & TrueTypeFont) > 0)
+            {
+                if (lParam == ExtractFamilies)
+                {
                     string familyName = logFont.elfLogFont.lfFaceName;
-                    if (!families.ContainsKey(familyName)) {
+                    if (!families.ContainsKey(familyName))
+                    {
                         families.Add(familyName, String.Empty);
                     }
                 }
-                else if (lParam == ExtractStyles) {
+                else if (lParam == ExtractStyles)
+                {
                     string styleName = new String(logFont.elfStyle).Trim('\0');
-                    if (!styles.Contains(styleName)) {
+                    if (!styles.Contains(styleName))
+                    {
                         styles.AddStyle(styleName);
                     }
                 }
-                else {
+                else
+                {
                     throw new InvalidOperationException("Unknown EnumFontMethod parameter.");
                 }
             }
@@ -87,34 +100,42 @@ namespace Fonet.Pdf.Gdi {
         }
     }
 
-    public class FontStyles {
+    public class FontStyles
+    {
         private IDictionary styles = new Hashtable();
 
-        public bool RegularAvailable {
+        public bool RegularAvailable
+        {
             get { return (styles.Contains("Regular") || styles.Contains("Normal")); }
         }
 
-        public bool BoldAvailable {
+        public bool BoldAvailable
+        {
             get { return (styles.Contains("Bold")); }
         }
 
-        public bool ItalicAvailable {
+        public bool ItalicAvailable
+        {
             get { return (styles.Contains("Italic")); }
         }
 
-        public bool BoldItalicAvailable {
+        public bool BoldItalicAvailable
+        {
             get { return (styles.Contains("Bold Italic")); }
         }
 
-        internal void AddStyle(string styleName) {
+        internal void AddStyle(string styleName)
+        {
             styles.Add(styleName, String.Empty);
         }
 
-        internal void Clear() {
+        internal void Clear()
+        {
             styles.Clear();
         }
 
-        internal bool Contains(string styleName) {
+        internal bool Contains(string styleName)
+        {
             return styles.Contains(styleName);
         }
     }

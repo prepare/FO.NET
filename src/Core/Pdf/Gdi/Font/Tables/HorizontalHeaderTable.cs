@@ -2,14 +2,16 @@
 //Apache2, 2009, griffm, FO.NET
 using System;
 
-namespace Fonet.Pdf.Gdi.Font {
+namespace Fonet.Pdf.Gdi.Font
+{
     /// <summary>
     ///     Class that represents the Horizontal Header table.
     /// </summary>
     /// <remarks>
     ///     http://www.microsoft.com/typography/otspec/hhea.htm
     /// </remarks>
-    internal class HorizontalHeaderTable : FontTable {
+    internal class HorizontalHeaderTable : FontTable
+    {
         /// <summary>
         ///     Table version number 0x00010000 for version 1.0. 
         /// </summary>
@@ -81,12 +83,13 @@ namespace Fonet.Pdf.Gdi.Font {
         ///     Class constructor.
         /// </summary>
         /// <param name="entry"></param>
-        public HorizontalHeaderTable(DirectoryEntry entry) : base(TableNames.Hhea, entry) {}
+        public HorizontalHeaderTable(DirectoryEntry entry) : base(TableNames.Hhea, entry) { }
 
         /// <summary>
         ///     Gets the number of horiztonal metrics.
         /// </summary>
-        public int HMetricCount {
+        public int HMetricCount
+        {
             get { return numberOfHMetrics; }
             set { numberOfHMetrics = Convert.ToUInt16(value); }
         }
@@ -96,7 +99,8 @@ namespace Fonet.Pdf.Gdi.Font {
         ///     in the supplied stream.
         /// </summary>
         /// <param name="reader"></param>
-        protected internal override void Read(FontFileReader reader) {
+        protected internal override void Read(FontFileReader reader)
+        {
             FontFileStream stream = reader.Stream;
             versionNo = stream.ReadFixed();
             ascender = stream.ReadFWord();
@@ -118,7 +122,8 @@ namespace Fonet.Pdf.Gdi.Font {
             numberOfHMetrics = stream.ReadUShort();
         }
 
-        protected internal override void Write(FontFileWriter writer) {
+        protected internal override void Write(FontFileWriter writer)
+        {
             FontFileStream stream = writer.Stream;
 
             stream.WriteFixed(versionNo);

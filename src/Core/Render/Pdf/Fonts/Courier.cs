@@ -1,16 +1,19 @@
 ﻿//Apache2, 2017, WinterDev
 //Apache2, 2009, griffm, FO.NET
-namespace Fonet.Render.Pdf.Fonts {
-    internal class Courier : Base14Font {
+namespace Fonet.Render.Pdf.Fonts
+{
+    internal class Courier : Base14Font
+    {
         private static readonly int[] DefaultWidths;
 
         private static readonly CodePointMapping DefaultMapping
             = CodePointMapping.GetMapping("WinAnsiEncoding");
 
         public Courier()
-            : base("Courier", "WinAnsiEncoding", 562, 629, -157, 32, 255, DefaultWidths, DefaultMapping) {}
+            : base("Courier", "WinAnsiEncoding", 562, 629, -157, 32, 255, DefaultWidths, DefaultMapping) { }
 
-        static Courier() {
+        static Courier()
+        {
             DefaultWidths = new int[256];
             DefaultWidths[0x0041] = 600;
             DefaultWidths[0x00C6] = 600;

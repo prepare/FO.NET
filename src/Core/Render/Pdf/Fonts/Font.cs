@@ -3,11 +3,13 @@
 using Fonet.Layout;
 using Fonet.Pdf;
 
-namespace Fonet.Render.Pdf.Fonts {
+namespace Fonet.Render.Pdf.Fonts
+{
     /// <summary>
     ///     Base class for PDF font classes
     /// </summary>
-    internal abstract class Font : IFontMetric {
+    internal abstract class Font : IFontMetric
+    {
         /// <summary>
         ///     Get the encoding of the font.
         /// </summary>

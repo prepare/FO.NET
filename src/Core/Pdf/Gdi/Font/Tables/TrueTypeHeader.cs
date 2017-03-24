@@ -3,17 +3,20 @@
 using System;
 using System.Collections;
 
-namespace Fonet.Pdf.Gdi.Font {
+namespace Fonet.Pdf.Gdi.Font
+{
     /// <summary>
     ///     Class that represents the Offset and Directory tables.
     /// </summary>
     /// <remarks>
     ///     http://www.microsoft.com/typography/otspec/otff.htm
     /// </remarks>
-    internal class TrueTypeHeader {
+    internal class TrueTypeHeader
+    {
         private IDictionary directoryEntries;
 
-        protected internal void Read(FontFileStream stream) {
+        protected internal void Read(FontFileStream stream)
+        {
             // Skip sfnt version (0x00010000 for version 1.0).
             stream.Skip(PrimitiveSizes.Fixed);
 
@@ -21,10 +24,11 @@ namespace Fonet.Pdf.Gdi.Font {
             int numTables = stream.ReadUShort();
 
             // Skip searchRange, entrySelector and rangeShift entries (3 x ushort)
-            stream.Skip(PrimitiveSizes.UShort*3);
+            stream.Skip(PrimitiveSizes.UShort * 3);
 
             directoryEntries = new Hashtable(numTables);
-            for (int i = 0; i < numTables; i++) {
+            for (int i = 0; i < numTables; i++)
+            {
                 DirectoryEntry entry = new DirectoryEntry(
                     stream.ReadTag(), // 4-byte identifier.
                     stream.ReadULong(), // CheckSum for this table. 
@@ -41,7 +45,8 @@ namespace Fonet.Pdf.Gdi.Font {
         /// </summary>
         /// <param name="tableName">A table name.</param>
         /// <returns></returns>
-        public bool Contains(string tableName) {
+        public bool Contains(string tableName)
+        {
             return (directoryEntries != null && directoryEntries.Contains(tableName));
         }
 
@@ -55,19 +60,23 @@ namespace Fonet.Pdf.Gdi.Font {
         /// <exception cref="ArgumentException">
         ///     If <b>tableName</b> does not represent a table in this font.
         /// </exception>
-        public DirectoryEntry this[string tableName] {
-            get {
-                if (!Contains(tableName)) {
+        public DirectoryEntry this[string tableName]
+        {
+            get
+            {
+                if (!Contains(tableName))
+                {
                     throw new ArgumentException("Cannot locate table " + tableName, "tableName");
                 }
-                return (DirectoryEntry) directoryEntries[tableName];
+                return (DirectoryEntry)directoryEntries[tableName];
             }
         }
 
         /// <summary>
         ///     Gets the number tables.
         /// </summary>
-        public int Count {
+        public int Count
+        {
             get { return (directoryEntries != null) ? directoryEntries.Count : 0; }
         }
     }

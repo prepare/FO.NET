@@ -2,14 +2,16 @@
 //Apache2, 2009, griffm, FO.NET
 using System;
 
-namespace Fonet.Pdf.Gdi.Font {
+namespace Fonet.Pdf.Gdi.Font
+{
     /// <summary>
     ///     Class that represents the Font Header table.
     /// </summary>
     /// <remarks>
     ///     http://www.microsoft.com/typography/otspec/head.htm
     /// </remarks>
-    internal class HeaderTable : FontTable {
+    internal class HeaderTable : FontTable
+    {
         internal int versionNo;
         internal int fontRevision;
         internal uint checkSumAdjustment;
@@ -36,13 +38,14 @@ namespace Fonet.Pdf.Gdi.Font {
         /// </summary>
         /// <param name="entry"></param>
         public HeaderTable(DirectoryEntry entry)
-            : base(TableNames.Head, entry) {}
+            : base(TableNames.Head, entry) { }
 
         /// <summary>
         ///     Gets a value that indicates whether glyph offsets in the 
         ///     loca table are stored as a ushort or ulong.
         /// </summary>
-        public bool IsShortFormat {
+        public bool IsShortFormat
+        {
             get { return (indexToLocFormat == 0); }
         }
 
@@ -51,7 +54,8 @@ namespace Fonet.Pdf.Gdi.Font {
         ///     in the supplied stream.
         /// </summary>
         /// <param name="reader"></param>
-        protected internal override void Read(FontFileReader reader) {
+        protected internal override void Read(FontFileReader reader)
+        {
             FontFileStream stream = reader.Stream;
             versionNo = stream.ReadFixed();
             fontRevision = stream.ReadFixed();
@@ -78,11 +82,14 @@ namespace Fonet.Pdf.Gdi.Font {
         ///     to BaseDate.  If an exception occurs, BaseDate is returned.
         /// </summary>
         /// <param name="seconds"></param>
-        private DateTime GetDate(long seconds) {
-            try {
+        private DateTime GetDate(long seconds)
+        {
+            try
+            {
                 return new DateTime(BaseDate.Ticks).AddSeconds(seconds);
             }
-            catch {
+            catch
+            {
                 return BaseDate;
             }
         }
@@ -91,7 +98,8 @@ namespace Fonet.Pdf.Gdi.Font {
         ///     Writes the contents of the head table to the supplied stream.
         /// </summary>
         /// <param name="writer"></param>
-        protected internal override void Write(FontFileWriter writer) {
+        protected internal override void Write(FontFileWriter writer)
+        {
             FontFileStream stream = writer.Stream;
             stream.WriteFixed(versionNo);
             stream.WriteFixed(fontRevision);
@@ -100,8 +108,8 @@ namespace Fonet.Pdf.Gdi.Font {
             stream.WriteULong(0x5F0F3CF5);
             stream.WriteUShort(flags);
             stream.WriteUShort(unitsPermEm);
-            stream.WriteDateTime((long) (createDate - BaseDate).TotalSeconds);
-            stream.WriteDateTime((long) (updateDate - BaseDate).TotalSeconds);
+            stream.WriteDateTime((long)(createDate - BaseDate).TotalSeconds);
+            stream.WriteDateTime((long)(updateDate - BaseDate).TotalSeconds);
             stream.WriteShort(xMin);
             stream.WriteShort(yMin);
             stream.WriteShort(xMax);

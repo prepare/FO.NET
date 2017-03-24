@@ -2,11 +2,13 @@
 //Apache2, 2009, griffm, FO.NET
 using System;
 
-namespace Fonet.Pdf.Gdi.Font {
+namespace Fonet.Pdf.Gdi.Font
+{
     /// <summary>
     ///     List of all TrueType and OpenType tables
     /// </summary>
-    internal abstract class TableNames {
+    internal abstract class TableNames
+    {
         // TrueType font collection
         public const string Ttcf = "ttcf";
 
@@ -54,18 +56,21 @@ namespace Fonet.Pdf.Gdi.Font {
         /// </summary>
         /// <param name="tableName"></param>
         /// <returns></returns>
-        public static uint ToUint(string tableName) {
-            if (tableName == null) {
+        public static uint ToUint(string tableName)
+        {
+            if (tableName == null)
+            {
                 throw new ArgumentNullException("tableName", "tableName cannot be null.");
             }
-            if (tableName.Length != 4) {
+            if (tableName.Length != 4)
+            {
                 throw new ArgumentException("tableName must be 4 characters in length.");
             }
 
-            return (uint) (((byte) tableName[3] << 24) |
-                ((byte) tableName[2] << 16) |
-                ((byte) tableName[1] << 8) |
-                ((byte) tableName[0]));
+            return (uint)(((byte)tableName[3] << 24) |
+                ((byte)tableName[2] << 16) |
+                ((byte)tableName[1] << 8) |
+                ((byte)tableName[0]));
         }
     }
 }

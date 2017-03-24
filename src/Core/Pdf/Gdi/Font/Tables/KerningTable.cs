@@ -2,14 +2,16 @@
 //Apache2, 2009, griffm, FO.NET
 using System;
 
-namespace Fonet.Pdf.Gdi.Font {
+namespace Fonet.Pdf.Gdi.Font
+{
     /// <summary>
     ///     Class that represents the Kerning table.
     /// </summary>
     /// <remarks>
     ///     http://www.microsoft.com/typography/otspec/kern.htm
     /// </remarks>
-    internal class KerningTable : FontTable {
+    internal class KerningTable : FontTable
+    {
         private const int HoriztonalMask = 0x01;
         private const int MinimumMask = 0x02;
 
@@ -22,13 +24,14 @@ namespace Fonet.Pdf.Gdi.Font {
         /// </summary>
         /// <param name="entry"></param>
         public KerningTable(DirectoryEntry entry)
-            : base(TableNames.Kern, entry) {}
+            : base(TableNames.Kern, entry) { }
 
         /// <summary>
         ///     Gets a boolean value that indicates this font contains format 0
         ///     kerning information.
         /// </summary>
-        public bool HasKerningInfo {
+        public bool HasKerningInfo
+        {
             get { return hasKerningInfo; }
         }
 
@@ -39,7 +42,8 @@ namespace Fonet.Pdf.Gdi.Font {
         ///     If <i>HasKerningInfo</i> returns <b>false</b>, this method will 
         ///     always return null.
         /// </remarks>
-        public KerningPairs KerningPairs {
+        public KerningPairs KerningPairs
+        {
             get { return pairs; }
         }
 
@@ -48,7 +52,8 @@ namespace Fonet.Pdf.Gdi.Font {
         ///     in the supplied stream.
         /// </summary>
         /// <param name="reader"></param>
-        protected internal override void Read(FontFileReader reader) {
+        protected internal override void Read(FontFileReader reader)
+        {
             FontFileStream stream = reader.Stream;
 
             // Skip version field
@@ -57,7 +62,8 @@ namespace Fonet.Pdf.Gdi.Font {
             // Number of subtables
             int numTables = stream.ReadUShort();
 
-            for (int i = 0; i < numTables; i++) {
+            for (int i = 0; i < numTables; i++)
+            {
                 // Another pesky version field
                 stream.Skip(PrimitiveSizes.UShort);
 
@@ -70,7 +76,8 @@ namespace Fonet.Pdf.Gdi.Font {
                 // Only interested in horiztonal kerning values in format 0
                 if ((coverage & HoriztonalMask) == 1 &&
                     (coverage & MinimumMask) == 0 &&
-                    ((coverage >> 8) == 0)) {
+                    ((coverage >> 8) == 0))
+                {
                     // The number of kerning pairs in the table.
                     int numPairs = stream.ReadUShort();
 
@@ -78,9 +85,10 @@ namespace Fonet.Pdf.Gdi.Font {
                     pairs = new KerningPairs(numPairs);
 
                     // Skip pointless shit
-                    stream.Skip(3*PrimitiveSizes.UShort);
+                    stream.Skip(3 * PrimitiveSizes.UShort);
 
-                    for (int j = 0; j < numPairs; j++) {
+                    for (int j = 0; j < numPairs; j++)
+                    {
                         pairs.Add(
                             stream.ReadUShort(), // Left glyph index
                             stream.ReadUShort(), // Right glyph index
@@ -88,8 +96,9 @@ namespace Fonet.Pdf.Gdi.Font {
                     }
 
                 }
-                else {
-                    stream.Skip(length - 3*PrimitiveSizes.UShort);
+                else
+                {
+                    stream.Skip(length - 3 * PrimitiveSizes.UShort);
                 }
             }
         }
@@ -98,7 +107,8 @@ namespace Fonet.Pdf.Gdi.Font {
         ///     No supported.
         /// </summary>
         /// <param name="writer"></param>
-        protected internal override void Write(FontFileWriter writer) {
+        protected internal override void Write(FontFileWriter writer)
+        {
             throw new InvalidOperationException("Write not supported.");
         }
     }

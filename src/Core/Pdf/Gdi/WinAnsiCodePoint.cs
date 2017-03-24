@@ -2,11 +2,13 @@
 //Apache2, 2009, griffm, FO.NET
 using System;
 
-namespace Fonet.Pdf.Gdi {
+namespace Fonet.Pdf.Gdi
+{
     /// <summary>
     ///     Maps a Unicode character to a WinAnsi codepoint value.
     /// </summary>
-    internal class WinAnsiMapping {
+    internal class WinAnsiMapping
+    {
         /// <summary>
         ///     First column is codepoint value.  Second column is unicode value.
         /// </summary>
@@ -239,17 +241,22 @@ namespace Fonet.Pdf.Gdi {
 
         private ushort[] latin1Map;
 
-        private WinAnsiMapping() {
+        private WinAnsiMapping()
+        {
             latin1Map = new ushort[256];
-            for (int i = 0; i < winAnsiEncoding.Length; i += 2) {
-                if (winAnsiEncoding[i + 1] < 256) {
-                    latin1Map[winAnsiEncoding[i + 1]] = (char) winAnsiEncoding[i];
+            for (int i = 0; i < winAnsiEncoding.Length; i += 2)
+            {
+                if (winAnsiEncoding[i + 1] < 256)
+                {
+                    latin1Map[winAnsiEncoding[i + 1]] = (char)winAnsiEncoding[i];
                 }
             }
         }
 
-        public ushort MapCharacter(char c) {
-            if (c > Byte.MaxValue) {
+        public ushort MapCharacter(char c)
+        {
+            if (c > Byte.MaxValue)
+            {
                 return 0;
             }
             return latin1Map[c];

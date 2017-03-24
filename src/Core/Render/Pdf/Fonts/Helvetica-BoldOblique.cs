@@ -1,16 +1,19 @@
 ﻿//Apache2, 2017, WinterDev
 //Apache2, 2009, griffm, FO.NET
-namespace Fonet.Render.Pdf.Fonts {
-    internal class HelveticaBoldOblique : Base14Font {
+namespace Fonet.Render.Pdf.Fonts
+{
+    internal class HelveticaBoldOblique : Base14Font
+    {
         private static readonly int[] CodePointWidths;
 
         private static readonly CodePointMapping DefaultMapping
             = CodePointMapping.GetMapping("WinAnsiEncoding");
 
         public HelveticaBoldOblique()
-            : base("Helvetica-BoldOblique", "WinAnsiEncoding", 718, 718, -207, 32, 255, CodePointWidths, DefaultMapping) {}
+            : base("Helvetica-BoldOblique", "WinAnsiEncoding", 718, 718, -207, 32, 255, CodePointWidths, DefaultMapping) { }
 
-        static HelveticaBoldOblique() {
+        static HelveticaBoldOblique()
+        {
             CodePointWidths = new int[256];
             CodePointWidths[0x0041] = 722;
             CodePointWidths[0x00C6] = 1000;

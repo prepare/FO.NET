@@ -1,27 +1,33 @@
 ﻿//Apache2, 2017, WinterDev
 //Apache2, 2009, griffm, FO.NET
-namespace Fonet.Pdf.Gdi.Font {
+namespace Fonet.Pdf.Gdi.Font
+{
     /// <summary>
     ///     Summary description for HorizontalMetric.
     /// </summary>
-    internal class HorizontalMetric {
+    internal class HorizontalMetric
+    {
         private ushort advanceWidth;
         private short leftSideBearing;
 
-        public HorizontalMetric(ushort advanceWidth, short leftSideBearing) {
+        public HorizontalMetric(ushort advanceWidth, short leftSideBearing)
+        {
             this.advanceWidth = advanceWidth;
             this.leftSideBearing = leftSideBearing;
         }
 
-        public HorizontalMetric Clone() {
+        public HorizontalMetric Clone()
+        {
             return new HorizontalMetric(advanceWidth, leftSideBearing);
         }
 
-        public ushort AdvanceWidth {
+        public ushort AdvanceWidth
+        {
             get { return advanceWidth; }
         }
 
-        public short LeftSideBearing {
+        public short LeftSideBearing
+        {
             get { return leftSideBearing; }
         }
     }

@@ -1,11 +1,13 @@
 ﻿//Apache2, 2017, WinterDev
 //Apache2, 2009, griffm, FO.NET
-namespace Fonet.Render.Pdf.Fonts {
+namespace Fonet.Render.Pdf.Fonts
+{
     /// <summary>
     ///     Collection of font properties such as face name and whether the 
     ///     a font is bold and/or italic.
     /// </summary>
-    internal sealed class FontProperties {
+    internal sealed class FontProperties
+    {
         private string faceName;
         private bool bold;
         private bool italic;
@@ -22,29 +24,35 @@ namespace Fonet.Render.Pdf.Fonts {
         /// <param name="faceName">Font face name, e.g. Arial.</param>
         /// <param name="bold">Bold flag.</param>
         /// <param name="italic">Italic flag.</param>
-        public FontProperties(string faceName, bool bold, bool italic) {
+        public FontProperties(string faceName, bool bold, bool italic)
+        {
             this.faceName = faceName;
             this.bold = bold;
             this.italic = italic;
         }
 
-        public string FaceName {
+        public string FaceName
+        {
             get { return faceName; }
         }
 
-        public bool IsRegular {
+        public bool IsRegular
+        {
             get { return (!IsBold && !IsItalic); }
         }
 
-        public bool IsBold {
+        public bool IsBold
+        {
             get { return bold; }
         }
 
-        public bool IsItalic {
+        public bool IsItalic
+        {
             get { return italic; }
         }
 
-        public bool IsBoldItalic {
+        public bool IsBoldItalic
+        {
             get { return (IsBold && IsItalic); }
         }
     }
