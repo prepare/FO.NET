@@ -1,12 +1,16 @@
+﻿//Apache2, 2017, WinterDev
+//Apache2, 2009, griffm, FO.NET
 using System;
 using System.IO;
 using Fonet.Pdf.Gdi.Font;
 
-namespace Fonet.Pdf.Gdi {
+namespace Fonet.Pdf.Gdi
+{
     /// <summary>
     ///     Retrieves all pertinent TrueType tables by invoking GetFontData.
     /// </summary>
-    public class GdiFontCreator {
+    public class GdiFontCreator
+    {
         private const int NumTables = 11;
 
         private GdiDeviceContent dc;
@@ -16,14 +20,16 @@ namespace Fonet.Pdf.Gdi {
 
         private int offset;
 
-        public GdiFontCreator(GdiDeviceContent dc) {
+        public GdiFontCreator(GdiDeviceContent dc)
+        {
             this.dc = dc;
             this.header = new TrueTypeHeader();
             this.ms = new MemoryStream();
             this.fs = new FontFileStream(ms);
         }
 
-        public byte[] Build() {
+        public byte[] Build()
+        {
             byte[] headData = ReadTableData(TableNames.Head);
             byte[] maxpData = ReadTableData(TableNames.Maxp);
             byte[] hheaData = ReadTableData(TableNames.Hhea);
@@ -44,7 +50,7 @@ namespace Fonet.Pdf.Gdi {
             fs.WriteUShort(0); // range shift
 
             // Offsets begin from end of table directory
-            offset = (int) fs.Position + NumTables*(PrimitiveSizes.ULong*4);
+            offset = (int)fs.Position + NumTables * (PrimitiveSizes.ULong * 4);
 
             // Write directory entry for each table
             WriteDirectoryEntry(TableNames.Head, headData);
@@ -74,32 +80,36 @@ namespace Fonet.Pdf.Gdi {
             return ms.ToArray();
         }
 
-        private void WriteTable(byte[] data) {
+        private void WriteTable(byte[] data)
+        {
             fs.Write(data, 0, data.Length);
 
             // Align table on 4-byte boundary
             fs.Pad();
         }
 
-        private void WriteDirectoryEntry(string tableName, byte[] data) {
-            fs.WriteByte((byte) tableName[0]);
-            fs.WriteByte((byte) tableName[1]);
-            fs.WriteByte((byte) tableName[2]);
-            fs.WriteByte((byte) tableName[3]);
+        private void WriteDirectoryEntry(string tableName, byte[] data)
+        {
+            fs.WriteByte((byte)tableName[0]);
+            fs.WriteByte((byte)tableName[1]);
+            fs.WriteByte((byte)tableName[2]);
+            fs.WriteByte((byte)tableName[3]);
             fs.WriteULong(0);
-            fs.WriteULong((uint) offset);
-            fs.WriteULong((uint) data.Length);
+            fs.WriteULong((uint)offset);
+            fs.WriteULong((uint)data.Length);
 
             offset += data.Length;
         }
 
-        private byte[] ReadTableData(string tableName) {
+        private byte[] ReadTableData(string tableName)
+        {
             uint tag = TableNames.ToUint(tableName);
             uint size = LibWrapper.GetFontData(dc.Handle, tag, 0, null, 0);
 
             byte[] data = new byte[size];
-            uint rv = LibWrapper.GetFontData(dc.Handle, tag, 0, data, (uint) data.Length);
-            if (rv == GdiFontMetrics.GDI_ERROR) {
+            uint rv = LibWrapper.GetFontData(dc.Handle, tag, 0, data, (uint)data.Length);
+            if (rv == GdiFontMetrics.GDI_ERROR)
+            {
                 throw new Exception("Failed to retrieve table " + tableName);
             }
 

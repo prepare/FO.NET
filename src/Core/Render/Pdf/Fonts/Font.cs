@@ -1,11 +1,15 @@
+﻿//Apache2, 2017, WinterDev
+//Apache2, 2009, griffm, FO.NET
 using Fonet.Layout;
 using Fonet.Pdf;
 
-namespace Fonet.Render.Pdf.Fonts {
+namespace Fonet.Render.Pdf.Fonts
+{
     /// <summary>
     ///     Base class for PDF font classes
     /// </summary>
-    internal abstract class Font : IFontMetric {
+    internal abstract class Font : IFontMetric
+    {
         /// <summary>
         ///     Get the encoding of the font.
         /// </summary>

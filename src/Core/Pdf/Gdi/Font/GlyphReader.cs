@@ -1,10 +1,15 @@
-namespace Fonet.Pdf.Gdi.Font {
-    internal class GlyphReader {
+﻿//Apache2, 2017, WinterDev
+//Apache2, 2009, griffm, FO.NET
+namespace Fonet.Pdf.Gdi.Font
+{
+    internal class GlyphReader
+    {
         private IndexToLocationTable loca;
         private FontFileReader reader;
         private DirectoryEntry glyfEntry;
 
-        public GlyphReader(FontFileReader reader) {
+        public GlyphReader(FontFileReader reader)
+        {
             this.reader = reader;
             this.glyfEntry = reader.GetDictionaryEntry(TableNames.Glyf);
             this.loca = reader.GetIndexToLocationTable();
@@ -13,7 +18,8 @@ namespace Fonet.Pdf.Gdi.Font {
         /// <summary>
         ///     Reads a glyph description from the specified offset.
         /// </summary>
-        public Glyph ReadGlyph(int glyphIndex) {
+        public Glyph ReadGlyph(int glyphIndex)
+        {
             FontFileStream stream = reader.Stream;
 
             // Offset from beginning of font file
@@ -21,7 +27,8 @@ namespace Fonet.Pdf.Gdi.Font {
             long length = GetGlyphLength(glyphIndex);
 
             Glyph glyph = new Glyph(reader.IndexMappings.Map(glyphIndex));
-            if (length != 0) {
+            if (length != 0)
+            {
                 byte[] glyphData = new byte[length];
 
                 // Read glyph description into byte array
@@ -36,9 +43,10 @@ namespace Fonet.Pdf.Gdi.Font {
                 bool compositeGlyph = (glyphStream.ReadShort() < 0);
 
                 // Skip font bounding box
-                glyphStream.Skip(PrimitiveSizes.Short*4);
+                glyphStream.Skip(PrimitiveSizes.Short * 4);
 
-                if (compositeGlyph) {
+                if (compositeGlyph)
+                {
                     ReadCompositeGlyph(glyphStream, glyph);
                 }
             }
@@ -55,9 +63,11 @@ namespace Fonet.Pdf.Gdi.Font {
         ///     the beginning of the glyph description, i.e. the flags field.
         /// </remarks>
         /// <param name="stream"></param>
-        private void ReadCompositeGlyph(FontFileStream stream, Glyph glyph) {
+        private void ReadCompositeGlyph(FontFileStream stream, Glyph glyph)
+        {
             bool moreComposites = true;
-            while (moreComposites) {
+            while (moreComposites)
+            {
                 short flags = stream.ReadShort();
                 long offset = stream.Position;
                 int subsetIndex = reader.IndexMappings.Map(stream.ReadShort());
@@ -71,35 +81,43 @@ namespace Fonet.Pdf.Gdi.Font {
                 // The following code is based on the C pseudo code supplied 
                 // in the glyf table specification.
                 int skipBytes = 0;
-                if ((flags & BitMasks.Arg1And2AreWords) > 0) {
-                    skipBytes = PrimitiveSizes.Short*2;
+                if ((flags & BitMasks.Arg1And2AreWords) > 0)
+                {
+                    skipBytes = PrimitiveSizes.Short * 2;
                 }
-                else {
+                else
+                {
                     skipBytes = PrimitiveSizes.UShort;
                 }
 
-                if ((flags & BitMasks.WeHaveAScale) > 0) {
+                if ((flags & BitMasks.WeHaveAScale) > 0)
+                {
                     // Skip scale
                     skipBytes = PrimitiveSizes.F2DOT14;
                 }
-                else if ((flags & BitMasks.WeHaveAnXAndYScale) > 0) {
+                else if ((flags & BitMasks.WeHaveAnXAndYScale) > 0)
+                {
                     // Skip xscale and yscale
-                    skipBytes = PrimitiveSizes.F2DOT14*2;
+                    skipBytes = PrimitiveSizes.F2DOT14 * 2;
                 }
-                else if ((flags & BitMasks.WeHaveATwoByTwo) > 0) {
+                else if ((flags & BitMasks.WeHaveATwoByTwo) > 0)
+                {
                     // Skip xscale, scale01, scale10 and yscale
-                    skipBytes = PrimitiveSizes.F2DOT14*4;
+                    skipBytes = PrimitiveSizes.F2DOT14 * 4;
                 }
 
                 // Glyph instructions
-                if ((flags & BitMasks.WeHaveInstructions) > 0) {
-                    skipBytes = PrimitiveSizes.Byte*stream.ReadUShort();
+                if ((flags & BitMasks.WeHaveInstructions) > 0)
+                {
+                    skipBytes = PrimitiveSizes.Byte * stream.ReadUShort();
                 }
 
-                if ((flags & BitMasks.MoreComponents) > 0) {
+                if ((flags & BitMasks.MoreComponents) > 0)
+                {
                     moreComposites = true;
                 }
-                else {
+                else
+                {
                     moreComposites = false;
                 }
 
@@ -113,12 +131,15 @@ namespace Fonet.Pdf.Gdi.Font {
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        private long GetGlyphLength(int index) {
-            if (index == loca.Count - 1) {
+        private long GetGlyphLength(int index)
+        {
+            if (index == loca.Count - 1)
+            {
                 // Last glyph
                 return glyfEntry.Length - loca[index];
             }
-            else {
+            else
+            {
                 return loca[index + 1] - loca[index];
             }
         }
@@ -127,7 +148,8 @@ namespace Fonet.Pdf.Gdi.Font {
     /// <summary>
     ///     Bit masks of the flags field in a composite glyph.
     /// </summary>
-    internal struct BitMasks {
+    internal struct BitMasks
+    {
         public const short Arg1And2AreWords = 1;
         public const short ArgsAreXYValues = 2; // 1 << 1
         public const short RoundXYToGrid = 4; // 1 << 2

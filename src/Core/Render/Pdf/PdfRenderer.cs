@@ -1,3 +1,5 @@
+﻿//Apache2, 2017, WinterDev
+//Apache2, 2009, griffm, FO.NET
 using System;
 using System.Collections;
 using System.IO;
@@ -11,9 +13,11 @@ using Fonet.Pdf;
 using Fonet.Render.Pdf.Fonts;
 using Fonet.Pdf.Gdi;
 
-namespace Fonet.Render.Pdf {
+namespace Fonet.Render.Pdf
+{
 
-    internal sealed class PdfRenderer {
+    internal sealed class PdfRenderer
+    {
         /// <summary>
         ///     The current vertical position in millipoints from bottom.
         /// </summary>
@@ -191,7 +195,8 @@ namespace Fonet.Render.Pdf {
         /// <summary>
         ///     Create the PDF renderer.
         /// </summary>
-        internal PdfRenderer(Stream stream) {
+        internal PdfRenderer(Stream stream)
+        {
             this.pdfDoc = new PdfCreator(stream);
         }
 
@@ -204,13 +209,17 @@ namespace Fonet.Render.Pdf {
         /// <exception cref="ArgumentException">
         ///     If <i>value</i> is not an instance of PdfRendererOptions
         /// </exception>
-        public PdfRendererOptions Options {
-            set {
-                if (value == null) {
+        public PdfRendererOptions Options
+        {
+            set
+            {
+                if (value == null)
+                {
                     throw new ArgumentNullException("value");
                 }
 
-                if (!(value is PdfRendererOptions)) {
+                if (!(value is PdfRendererOptions))
+                {
                     throw new ArgumentException("Options must be an instance of PdfRendererOptions");
                 }
 
@@ -219,14 +228,17 @@ namespace Fonet.Render.Pdf {
             }
         }
 
-        public void StartRenderer() {
-            if (options != null) {
+        public void StartRenderer()
+        {
+            if (options != null)
+            {
                 pdfDoc.SetOptions(options);
             }
             pdfDoc.outputHeader();
         }
 
-        public void StopRenderer() {
+        public void StopRenderer()
+        {
             fontSetup.AddToResources(new PdfFontCreator(pdfDoc), pdfDoc.getResources());
             pdfDoc.outputTrailer();
 
@@ -249,29 +261,35 @@ namespace Fonet.Render.Pdf {
         /// <summary>
         /// </summary>
         /// <param name="fontInfo"></param>
-        public void SetupFontInfo(FontInfo fontInfo) {
+        public void SetupFontInfo(FontInfo fontInfo)
+        {
             this.fontInfo = fontInfo;
             this.fontSetup = new FontSetup(
                 fontInfo, (options == null) ? FontType.Link : options.FontType);
         }
 
-        public void RenderSpanArea(SpanArea area) {
-            foreach (Box b in area.getChildren()) {
+        public void RenderSpanArea(SpanArea area)
+        {
+            foreach (Box b in area.getChildren())
+            {
                 b.render(this); // column areas
             }
 
         }
 
-        public void RenderBodyAreaContainer(BodyAreaContainer area) {
+        public void RenderBodyAreaContainer(BodyAreaContainer area)
+        {
             int saveY = this.currentYPosition;
             int saveX = this.currentAreaContainerXPosition;
 
-            if (area.getPosition() == Position.ABSOLUTE) {
+            if (area.getPosition() == Position.ABSOLUTE)
+            {
                 // Y position is computed assuming positive Y axis, adjust for negative postscript one
                 this.currentYPosition = area.GetYPosition();
                 this.currentAreaContainerXPosition = area.getXPosition();
             }
-            else if (area.getPosition() == Position.RELATIVE) {
+            else if (area.getPosition() == Position.RELATIVE)
+            {
                 this.currentYPosition -= area.GetYPosition();
                 this.currentAreaContainerXPosition += area.getXPosition();
             }
@@ -290,34 +308,41 @@ namespace Fonet.Render.Pdf {
             RenderAreaContainer(area.getFootnoteReferenceArea());
 
             // main reference area
-            foreach (Box b in area.getMainReferenceArea().getChildren()) {
+            foreach (Box b in area.getMainReferenceArea().getChildren())
+            {
                 b.render(this); // span areas
             }
 
-            if (area.getPosition() != Position.STATIC) {
+            if (area.getPosition() != Position.STATIC)
+            {
                 this.currentYPosition = saveY;
                 this.currentAreaContainerXPosition = saveX;
             }
-            else {
+            else
+            {
                 this.currentYPosition -= area.GetHeight();
             }
 
         }
 
-        public void RenderAreaContainer(AreaContainer area) {
+        public void RenderAreaContainer(AreaContainer area)
+        {
             int saveY = this.currentYPosition;
             int saveX = this.currentAreaContainerXPosition;
 
-            if (area.getPosition() == Position.ABSOLUTE) {
+            if (area.getPosition() == Position.ABSOLUTE)
+            {
                 // XPosition and YPosition give the content rectangle position
                 this.currentYPosition = area.GetYPosition();
                 this.currentAreaContainerXPosition = area.getXPosition();
             }
-            else if (area.getPosition() == Position.RELATIVE) {
+            else if (area.getPosition() == Position.RELATIVE)
+            {
                 this.currentYPosition -= area.GetYPosition();
                 this.currentAreaContainerXPosition += area.getXPosition();
             }
-            else if (area.getPosition() == Position.STATIC) {
+            else if (area.getPosition() == Position.STATIC)
+            {
                 this.currentYPosition -= area.getPaddingTop()
                     + area.getBorderTopWidth();
             }
@@ -325,32 +350,37 @@ namespace Fonet.Render.Pdf {
             this.currentXPosition = this.currentAreaContainerXPosition;
             DoFrame(area);
 
-            foreach (Box b in area.getChildren()) {
+            foreach (Box b in area.getChildren())
+            {
                 b.render(this);
             }
 
             // Restore previous origin
             this.currentYPosition = saveY;
             this.currentAreaContainerXPosition = saveX;
-            if (area.getPosition() == Position.STATIC) {
+            if (area.getPosition() == Position.STATIC)
+            {
                 this.currentYPosition -= area.GetHeight();
             }
         }
 
-        public void RenderBlockArea(BlockArea area) {
+        public void RenderBlockArea(BlockArea area)
+        {
             // KLease: Temporary test to fix block positioning
             // Offset ypos by padding and border widths
             this.currentYPosition -= (area.getPaddingTop()
                 + area.getBorderTopWidth());
             DoFrame(area);
-            foreach (Box b in area.getChildren()) {
+            foreach (Box b in area.getChildren())
+            {
                 b.render(this);
             }
             this.currentYPosition -= (area.getPaddingBottom()
                 + area.getBorderBottomWidth());
         }
 
-        public void RenderLineArea(LineArea area) {
+        public void RenderLineArea(LineArea area)
+        {
             int rx = this.currentAreaContainerXPosition + area.getStartIndent();
             int ry = this.currentYPosition;
             int w = area.getContentWidth();
@@ -361,12 +391,15 @@ namespace Fonet.Render.Pdf {
 
             int bl = this.currentYPosition;
 
-            foreach (Box b in area.getChildren()) {
-                if (b is InlineArea) {
-                    InlineArea ia = (InlineArea) b;
+            foreach (Box b in area.getChildren())
+            {
+                if (b is InlineArea)
+                {
+                    InlineArea ia = (InlineArea)b;
                     this.currentYPosition = ry - ia.getYOffset();
                 }
-                else {
+                else
+                {
                     this.currentYPosition = ry - area.getPlacementOffset();
                 }
                 b.render(this);
@@ -390,13 +423,14 @@ namespace Fonet.Render.Pdf {
         */
 
         private void AddLine(int x1, int y1, int x2, int y2, int th,
-                             PdfColor stroke) {
+                             PdfColor stroke)
+        {
             CloseText();
 
             currentStream.Write("ET\nq\n" + stroke.getColorSpaceOut(false)
-                + PdfNumber.doubleOut(x1/1000f) + " " + PdfNumber.doubleOut(y1/1000f) + " m "
-                + PdfNumber.doubleOut(x2/1000f) + " " + PdfNumber.doubleOut(y2/1000f) + " l "
-                + PdfNumber.doubleOut(th/1000f) + " w S\n" + "Q\nBT\n");
+                + PdfNumber.doubleOut(x1 / 1000f) + " " + PdfNumber.doubleOut(y1 / 1000f) + " m "
+                + PdfNumber.doubleOut(x2 / 1000f) + " " + PdfNumber.doubleOut(y2 / 1000f) + " l "
+                + PdfNumber.doubleOut(th / 1000f) + " w S\n" + "Q\nBT\n");
         }
 
         /**
@@ -414,12 +448,13 @@ namespace Fonet.Render.Pdf {
         */
 
         private void AddLine(int x1, int y1, int x2, int y2, int th, int rs,
-                             PdfColor stroke) {
+                             PdfColor stroke)
+        {
             CloseText();
             currentStream.Write("ET\nq\n" + stroke.getColorSpaceOut(false)
-                + SetRuleStylePattern(rs) + PdfNumber.doubleOut(x1/1000f) + " "
-                + PdfNumber.doubleOut(y1/1000f) + " m " + PdfNumber.doubleOut(x2/1000f) + " "
-                + PdfNumber.doubleOut(y2/1000f) + " l " + PdfNumber.doubleOut(th/1000f) + " w S\n"
+                + SetRuleStylePattern(rs) + PdfNumber.doubleOut(x1 / 1000f) + " "
+                + PdfNumber.doubleOut(y1 / 1000f) + " m " + PdfNumber.doubleOut(x2 / 1000f) + " "
+                + PdfNumber.doubleOut(y2 / 1000f) + " l " + PdfNumber.doubleOut(th / 1000f) + " w S\n"
                 + "Q\nBT\n");
         }
 
@@ -433,11 +468,12 @@ namespace Fonet.Render.Pdf {
         * @param stroke the stroke color/gradient
         */
 
-        private void AddRect(int x, int y, int w, int h, PdfColor stroke) {
+        private void AddRect(int x, int y, int w, int h, PdfColor stroke)
+        {
             CloseText();
             currentStream.Write("ET\nq\n" + stroke.getColorSpaceOut(false)
-                + PdfNumber.doubleOut(x/1000f) + " " + PdfNumber.doubleOut(y/1000f) + " "
-                + PdfNumber.doubleOut(w/1000f) + " " + PdfNumber.doubleOut(h/1000f) + " re s\n"
+                + PdfNumber.doubleOut(x / 1000f) + " " + PdfNumber.doubleOut(y / 1000f) + " "
+                + PdfNumber.doubleOut(w / 1000f) + " " + PdfNumber.doubleOut(h / 1000f) + " re s\n"
                 + "Q\nBT\n");
         }
 
@@ -453,12 +489,13 @@ namespace Fonet.Render.Pdf {
         */
 
         private void AddRect(int x, int y, int w, int h, PdfColor stroke,
-                             PdfColor fill) {
+                             PdfColor fill)
+        {
             CloseText();
             currentStream.Write("ET\nq\n" + fill.getColorSpaceOut(true)
-                + stroke.getColorSpaceOut(false) + PdfNumber.doubleOut(x/1000f)
-                + " " + PdfNumber.doubleOut(y/1000f) + " " + PdfNumber.doubleOut(w/1000f) + " "
-                + PdfNumber.doubleOut(h/1000f) + " re b\n" + "Q\nBT\n");
+                + stroke.getColorSpaceOut(false) + PdfNumber.doubleOut(x / 1000f)
+                + " " + PdfNumber.doubleOut(y / 1000f) + " " + PdfNumber.doubleOut(w / 1000f) + " "
+                + PdfNumber.doubleOut(h / 1000f) + " re b\n" + "Q\nBT\n");
         }
 
         /**
@@ -472,11 +509,12 @@ namespace Fonet.Render.Pdf {
         */
 
         private void AddFilledRect(int x, int y, int w, int h,
-                                   PdfColor fill) {
+                                   PdfColor fill)
+        {
             CloseText();
             currentStream.Write("ET\nq\n" + fill.getColorSpaceOut(true)
-                + PdfNumber.doubleOut(x/1000f) + " " + PdfNumber.doubleOut(y/1000f) + " "
-                + PdfNumber.doubleOut(w/1000f) + " " + PdfNumber.doubleOut(h/1000f) + " re f\n"
+                + PdfNumber.doubleOut(x / 1000f) + " " + PdfNumber.doubleOut(y / 1000f) + " "
+                + PdfNumber.doubleOut(w / 1000f) + " " + PdfNumber.doubleOut(h / 1000f) + " re f\n"
                 + "Q\nBT\n");
         }
 
@@ -486,7 +524,8 @@ namespace Fonet.Render.Pdf {
         * @param area the image area to render
         */
 
-        public void RenderImageArea(ImageArea area) {
+        public void RenderImageArea(ImageArea area)
+        {
             int x = this.currentXPosition + area.getXOffset();
             int y = this.currentYPosition;
             int w = area.getContentWidth();
@@ -499,10 +538,10 @@ namespace Fonet.Render.Pdf {
             PdfXObject xobj = this.pdfDoc.AddImage(img);
             CloseText();
 
-            currentStream.Write("ET\nq\n" + PdfNumber.doubleOut(((float) w)/1000f) + " 0 0 "
-                + PdfNumber.doubleOut(((float) h)/1000f) + " "
-                + PdfNumber.doubleOut(((float) x)/1000f) + " "
-                + PdfNumber.doubleOut(((float) (y - h))/1000f) + " cm\n" + "/" + xobj.Name.Name
+            currentStream.Write("ET\nq\n" + PdfNumber.doubleOut(((float)w) / 1000f) + " 0 0 "
+                + PdfNumber.doubleOut(((float)h) / 1000f) + " "
+                + PdfNumber.doubleOut(((float)x) / 1000f) + " "
+                + PdfNumber.doubleOut(((float)(y - h)) / 1000f) + " cm\n" + "/" + xobj.Name.Name
                 + " Do\nQ\nBT\n");
 
             this.currentXPosition += area.getContentWidth();
@@ -512,11 +551,13 @@ namespace Fonet.Render.Pdf {
         * render a foreign object area
         */
 
-        public void RenderForeignObjectArea(ForeignObjectArea area) {
+        public void RenderForeignObjectArea(ForeignObjectArea area)
+        {
             // if necessary need to scale and align the content
             this.currentXPosition = this.currentXPosition + area.getXOffset();
             // TODO: why was this here? this.currentYPosition = this.currentYPosition;
-            switch (area.getAlign()) {
+            switch (area.getAlign())
+            {
                 case TextAlign.START:
                     break;
                 case TextAlign.END:
@@ -525,7 +566,8 @@ namespace Fonet.Render.Pdf {
                 case TextAlign.JUSTIFY:
                     break;
             }
-            switch (area.getVerticalAlign()) {
+            switch (area.getVerticalAlign())
+            {
                 case VerticalAlign.BASELINE:
                     break;
                 case VerticalAlign.MIDDLE:
@@ -549,7 +591,8 @@ namespace Fonet.Render.Pdf {
             currentStream.Write("ET\n");
             // align and scale
             currentStream.Write("q\n");
-            switch (area.scalingMethod()) {
+            switch (area.scalingMethod())
+            {
                 case Scaling.UNIFORM:
                     break;
                 case Scaling.NON_UNIFORM:
@@ -558,7 +601,8 @@ namespace Fonet.Render.Pdf {
             // if the overflow is auto (default), scroll or visible
             // then the contents should not be clipped, since this
             // is considered a printing medium.
-            switch (area.getOverflow()) {
+            switch (area.getOverflow())
+            {
                 case Overflow.VISIBLE:
                 case Overflow.SCROLL:
                 case Overflow.AUTO:
@@ -580,10 +624,12 @@ namespace Fonet.Render.Pdf {
         * @param area inline area to render
         */
 
-        public void RenderWordArea(WordArea area) {
+        public void RenderWordArea(WordArea area)
+        {
             // TODO: I don't understand why we are locking the private member
             // _wordAreaPDF.  Maybe this string buffer was originally static? (MG)
-            lock (_wordAreaPDF) {
+            lock (_wordAreaPDF)
+            {
                 StringBuilder pdf = _wordAreaPDF;
                 pdf.Length = 0;
 
@@ -591,9 +637,11 @@ namespace Fonet.Render.Pdf {
                 bool kerningAvailable = false;
 
                 // If no options are supplied, by default we do not enable kerning
-                if (options != null && options.Kerning) {
+                if (options != null && options.Kerning)
+                {
                     kerning = area.GetFontState().Kerning;
-                    if (kerning != null && (kerning.Count > 0)) {
+                    if (kerning != null && (kerning.Count > 0))
+                    {
                         kerningAvailable = true;
                     }
                 }
@@ -602,24 +650,26 @@ namespace Fonet.Render.Pdf {
                 int size = area.GetFontState().FontSize;
 
                 // This assumes that *all* CIDFonts use a /ToUnicode mapping
-                Font font = (Font) area.GetFontState().FontInfo.GetFontByName(name);
+                Font font = (Font)area.GetFontState().FontInfo.GetFontByName(name);
                 bool useMultiByte = font.MultiByteFont;
 
                 string startText = useMultiByte ? "<" : "(";
                 string endText = useMultiByte ? "> " : ") ";
 
-                if ((!name.Equals(this.currentFontName)) || (size != this.currentFontSize)) {
+                if ((!name.Equals(this.currentFontName)) || (size != this.currentFontSize))
+                {
                     CloseText();
 
                     this.currentFontName = name;
                     this.currentFontSize = size;
                     pdf = pdf.Append("/" + name + " " +
-                        PdfNumber.doubleOut(size/1000f) + " Tf\n");
+                        PdfNumber.doubleOut(size / 1000f) + " Tf\n");
                 }
 
                 // Do letter spacing (must be outside of [...] TJ]
-                float letterspacing = ((float) area.GetFontState().LetterSpacing)/1000f;
-                if (letterspacing != this.currentLetterSpacing) {
+                float letterspacing = ((float)area.GetFontState().LetterSpacing) / 1000f;
+                if (letterspacing != this.currentLetterSpacing)
+                {
                     this.currentLetterSpacing = letterspacing;
                     CloseText();
                     pdf.Append(PdfNumber.doubleOut(letterspacing));
@@ -628,12 +678,13 @@ namespace Fonet.Render.Pdf {
 
                 PdfColor areaColor = this.currentFill;
 
-                if (areaColor == null || areaColor.getRed() != (double) area.getRed()
-                    || areaColor.getGreen() != (double) area.getGreen()
-                    || areaColor.getBlue() != (double) area.getBlue()) {
-                    areaColor = new PdfColor((double) area.getRed(),
-                                             (double) area.getGreen(),
-                                             (double) area.getBlue());
+                if (areaColor == null || areaColor.getRed() != (double)area.getRed()
+                    || areaColor.getGreen() != (double)area.getGreen()
+                    || areaColor.getBlue() != (double)area.getBlue())
+                {
+                    areaColor = new PdfColor((double)area.getRed(),
+                                             (double)area.getGreen(),
+                                             (double)area.getBlue());
 
 
                     CloseText();
@@ -647,28 +698,32 @@ namespace Fonet.Render.Pdf {
 
                 AddWordLines(area, rx, bl, size, areaColor);
 
-                if (!textOpen || bl != prevWordY) {
+                if (!textOpen || bl != prevWordY)
+                {
                     CloseText();
 
-                    pdf.Append("1 0 0 1 " + PdfNumber.doubleOut(rx/1000f) +
-                        " " + PdfNumber.doubleOut(bl/1000f) + " Tm [" + startText);
+                    pdf.Append("1 0 0 1 " + PdfNumber.doubleOut(rx / 1000f) +
+                        " " + PdfNumber.doubleOut(bl / 1000f) + " Tm [" + startText);
                     prevWordY = bl;
                     textOpen = true;
                 }
-                else {
+                else
+                {
                     // express the space between words in thousandths of an em
                     int space = prevWordX - rx + prevWordWidth;
-                    float emDiff = (float) space/(float) currentFontSize*1000f;
+                    float emDiff = (float)space / (float)currentFontSize * 1000f;
                     // this prevents a problem in Acrobat Reader where large
                     // numbers cause text to disappear or default to a limit
-                    if (emDiff < -33000) {
+                    if (emDiff < -33000)
+                    {
                         CloseText();
 
-                        pdf.Append("1 0 0 1 " + PdfNumber.doubleOut(rx/1000f) +
-                            " " + PdfNumber.doubleOut(bl/1000f) + " Tm [" + startText);
+                        pdf.Append("1 0 0 1 " + PdfNumber.doubleOut(rx / 1000f) +
+                            " " + PdfNumber.doubleOut(bl / 1000f) + " Tm [" + startText);
                         textOpen = true;
                     }
-                    else {
+                    else
+                    {
                         pdf.Append(PdfNumber.doubleOut(emDiff));
                         pdf.Append(" ");
                         pdf.Append(startText);
@@ -678,43 +733,53 @@ namespace Fonet.Render.Pdf {
                 prevWordX = rx;
 
                 string s;
-                if (area.getPageNumberID() != null) {
+                if (area.getPageNumberID() != null)
+                {
                     // This text is a page number, so resolve it
                     s = idReferences.getPageNumber(area.getPageNumberID());
-                    if (s == null) {
+                    if (s == null)
+                    {
                         s = String.Empty;
                     }
                 }
-                else {
+                else
+                {
                     s = area.getText();
                 }
 
                 int wordLength = s.Length;
-                for (int index = 0; index < wordLength; index++) {
+                for (int index = 0; index < wordLength; index++)
+                {
                     ushort ch = area.GetFontState().MapCharacter(s[index]);
 
-                    if (!useMultiByte) {
-                        if (ch > 127) {
+                    if (!useMultiByte)
+                    {
+                        if (ch > 127)
+                        {
                             pdf.Append("\\");
-                            pdf.Append(Convert.ToString((int) ch, 8));
+                            pdf.Append(Convert.ToString((int)ch, 8));
 
                         }
-                        else {
-                            switch (ch) {
+                        else
+                        {
+                            switch (ch)
+                            {
                                 case '(':
                                 case ')':
                                 case '\\':
                                     pdf.Append("\\");
                                     break;
                             }
-                            pdf.Append((char) ch);
+                            pdf.Append((char)ch);
                         }
                     }
-                    else {
+                    else
+                    {
                         pdf.Append(GetUnicodeString(ch));
                     }
 
-                    if (kerningAvailable && (index + 1) < wordLength) {
+                    if (kerningAvailable && (index + 1) < wordLength)
+                    {
                         ushort ch2 = area.GetFontState().MapCharacter(s[index + 1]);
                         AddKerning(pdf, ch, ch2, kerning, startText, endText);
                     }
@@ -733,14 +798,17 @@ namespace Fonet.Render.Pdf {
         * Convert a char to a multibyte hex representation
         */
 
-        private String GetUnicodeString(ushort c) {
+        private String GetUnicodeString(ushort c)
+        {
             StringBuilder sb = new StringBuilder(4);
 
-            byte[] uniBytes = Encoding.BigEndianUnicode.GetBytes(new char[] {(char) c});
+            byte[] uniBytes = Encoding.BigEndianUnicode.GetBytes(new char[] { (char)c });
 
-            foreach (byte b in uniBytes) {
+            foreach (byte b in uniBytes)
+            {
                 string hexString = Convert.ToString(b, 16);
-                if (hexString.Length == 1) {
+                if (hexString.Length == 1)
+                {
                     sb.Append("0");
                 }
                 sb.Append(hexString);
@@ -755,8 +823,10 @@ namespace Fonet.Render.Pdf {
         * still and writes out the TJ command to the stream if we do
         */
 
-        private void CloseText() {
-            if (textOpen) {
+        private void CloseText()
+        {
+            if (textOpen)
+            {
                 currentStream.Write("] TJ\n");
                 textOpen = false;
                 prevWordX = 0;
@@ -765,15 +835,18 @@ namespace Fonet.Render.Pdf {
         }
 
         private void AddKerning(StringBuilder buf, ushort leftIndex, ushort rightIndex,
-                                GdiKerningPairs kerning, string startText, string endText) {
-            if (kerning.HasPair(leftIndex, rightIndex)) {
+                                GdiKerningPairs kerning, string startText, string endText)
+        {
+            if (kerning.HasPair(leftIndex, rightIndex))
+            {
                 int width = kerning[leftIndex, rightIndex];
                 buf.Append(endText).Append(-width).Append(' ').Append(startText);
             }
         }
 
 
-        public void Render(Page page) {
+        public void Render(Page page)
+        {
             this.idReferences = page.getIDReferences();
             this.pdfResources = this.pdfDoc.getResources();
             this.pdfDoc.setIDReferences(idReferences);
@@ -788,7 +861,8 @@ namespace Fonet.Render.Pdf {
         * @param page page to render
         */
 
-        public void RenderPage(Page page) {
+        public void RenderPage(Page page)
+        {
             BodyAreaContainer body;
             AreaContainer before, after, start, end;
 
@@ -807,19 +881,23 @@ namespace Fonet.Render.Pdf {
 
             RenderBodyAreaContainer(body);
 
-            if (before != null) {
+            if (before != null)
+            {
                 RenderAreaContainer(before);
             }
 
-            if (after != null) {
+            if (after != null)
+            {
                 RenderAreaContainer(after);
             }
 
-            if (start != null) {
+            if (start != null)
+            {
                 RenderAreaContainer(start);
             }
 
-            if (end != null) {
+            if (end != null)
+            {
                 RenderAreaContainer(end);
             }
             CloseText();
@@ -833,29 +911,34 @@ namespace Fonet.Render.Pdf {
 
             currentPage = this.pdfDoc.makePage(
                 this.pdfResources, currentStream,
-                Convert.ToInt32(Math.Round(w/1000)),
-                Convert.ToInt32(Math.Round(h/1000)), page);
+                Convert.ToInt32(Math.Round(w / 1000)),
+                Convert.ToInt32(Math.Round(h / 1000)), page);
 
-            if (page.hasLinks() || currentAnnotList != null) {
-                if (currentAnnotList == null) {
+            if (page.hasLinks() || currentAnnotList != null)
+            {
+                if (currentAnnotList == null)
+                {
                     currentAnnotList = this.pdfDoc.makeAnnotList();
                 }
                 currentPage.SetAnnotList(currentAnnotList);
 
                 ArrayList lsets = page.getLinkSets();
-                foreach (LinkSet linkSet in lsets) {
+                foreach (LinkSet linkSet in lsets)
+                {
                     linkSet.align();
                     String dest = linkSet.getDest();
                     int linkType = linkSet.getLinkType();
                     ArrayList rsets = linkSet.getRects();
-                    foreach (LinkedRectangle lrect in rsets) {
+                    foreach (LinkedRectangle lrect in rsets)
+                    {
                         currentAnnotList.Add(this.pdfDoc.makeLink(lrect.getRectangle(),
                                                                   dest, linkType).GetReference());
                     }
                 }
                 currentAnnotList = null;
             }
-            else {
+            else
+            {
                 // just to be on the safe side
                 currentAnnotList = null;
             }
@@ -868,9 +951,11 @@ namespace Fonet.Render.Pdf {
         * defines a string containing dashArray and dashPhase for the rule style
         */
 
-        private String SetRuleStylePattern(int style) {
+        private String SetRuleStylePattern(int style)
+        {
             string rs = "";
-            switch (style) {
+            switch (style)
+            {
                 case RuleStyle.SOLID:
                     rs = "[] 0 d ";
                     break;
@@ -890,12 +975,14 @@ namespace Fonet.Render.Pdf {
             return rs;
         }
 
-        private void DoFrame(Area area) {
+        private void DoFrame(Area area)
+        {
             int w, h;
             int rx = this.currentAreaContainerXPosition;
             w = area.getContentWidth();
-            if (area is BlockArea) {
-                rx += ((BlockArea) area).getStartIndent();
+            if (area is BlockArea)
+            {
+                rx += ((BlockArea)area).getStartIndent();
             }
             h = area.getContentHeight();
             int ry = this.currentYPosition;
@@ -915,19 +1002,23 @@ namespace Fonet.Render.Pdf {
             int bottom = area.getBorderBottomWidth();
 
             // If style is solid, use filled rectangles
-            if (top != 0) {
+            if (top != 0)
+            {
                 AddFilledRect(rx, ry, w, top,
                               new PdfColor(bp.getBorderColor(BorderAndPadding.TOP)));
             }
-            if (left != 0) {
+            if (left != 0)
+            {
                 AddFilledRect(rx - left, ry - h - bottom, left, h + top + bottom,
                               new PdfColor(bp.getBorderColor(BorderAndPadding.LEFT)));
             }
-            if (right != 0) {
+            if (right != 0)
+            {
                 AddFilledRect(rx + w, ry - h - bottom, right, h + top + bottom,
                               new PdfColor(bp.getBorderColor(BorderAndPadding.RIGHT)));
             }
-            if (bottom != 0) {
+            if (bottom != 0)
+            {
                 AddFilledRect(rx, ry - h - bottom, w, bottom,
                               new PdfColor(bp.getBorderColor(BorderAndPadding.BOTTOM)));
             }
@@ -941,34 +1032,40 @@ namespace Fonet.Render.Pdf {
         /// <param name="y">The y position of top edge in millipoints.</param>
         /// <param name="w">The width in millipoints.</param>
         /// <param name="h">The height in millipoints.</param>
-        private void DoBackground(Area area, int x, int y, int w, int h) {
-            if (h == 0 || w == 0) {
+        private void DoBackground(Area area, int x, int y, int w, int h)
+        {
+            if (h == 0 || w == 0)
+            {
                 return;
             }
 
             BackgroundProps props = area.getBackground();
-            if (props == null) {
+            if (props == null)
+            {
                 return;
             }
 
-            if (props.backColor.Alpha == 0) {
+            if (props.backColor.Alpha == 0)
+            {
                 AddFilledRect(x, y, w, -h, new PdfColor(props.backColor));
             }
 
-            if (props.backImage != null) {
-                int imgW = props.backImage.Width*1000;
-                int imgH = props.backImage.Height*1000;
+            if (props.backImage != null)
+            {
+                int imgW = props.backImage.Width * 1000;
+                int imgH = props.backImage.Height * 1000;
 
                 int dx = x;
                 int dy = y;
                 int endX = x + w;
                 int endY = y - h;
-                int clipW = w%imgW;
-                int clipH = h%imgH;
+                int clipW = w % imgW;
+                int clipH = h % imgH;
 
                 bool repeatX = true;
                 bool repeatY = true;
-                switch (props.backRepeat) {
+                switch (props.backRepeat)
+                {
                     case BackgroundRepeat.REPEAT:
                         break;
                     case BackgroundRepeat.REPEAT_X:
@@ -988,45 +1085,57 @@ namespace Fonet.Render.Pdf {
                         break;
                 }
 
-                while (dy > endY) { // looping through rows 
-                    while (dx < endX) { // looping through cols 
-                        if (dx + imgW <= endX) {
+                while (dy > endY)
+                { // looping through rows 
+                    while (dx < endX)
+                    { // looping through cols 
+                        if (dx + imgW <= endX)
+                        {
                             // no x clipping 
-                            if (dy - imgH >= endY) {
+                            if (dy - imgH >= endY)
+                            {
                                 // no x clipping, no y clipping 
                                 DrawImageScaled(dx, dy, imgW, imgH, props.backImage);
                             }
-                            else {
+                            else
+                            {
                                 // no x clipping, y clipping 
                                 DrawImageClipped(dx, dy, 0, 0, imgW, clipH, props.backImage);
                             }
                         }
-                        else {
+                        else
+                        {
                             // x clipping
-                            if (dy - imgH >= endY) {
+                            if (dy - imgH >= endY)
+                            {
                                 // x clipping, no y clipping 
                                 DrawImageClipped(dx, dy, 0, 0, clipW, imgH, props.backImage);
                             }
-                            else {
+                            else
+                            {
                                 // x clipping, y clipping
                                 DrawImageClipped(dx, dy, 0, 0, clipW, clipH, props.backImage);
                             }
                         }
 
-                        if (repeatX) {
+                        if (repeatX)
+                        {
                             dx += imgW;
                         }
-                        else {
+                        else
+                        {
                             break;
                         }
                     } // end looping through cols
 
                     dx = x;
 
-                    if (repeatY) {
+                    if (repeatY)
+                    {
                         dy -= imgH;
                     }
-                    else {
+                    else
+                    {
                         break;
                     }
                 } // end looping through rows 
@@ -1042,9 +1151,10 @@ namespace Fonet.Render.Pdf {
         /// <param name="x">The x position of left edge in millipoints.</param>
         /// <param name="y">The y position of top edge in millipoints.</param>
         /// <param name="image">The image to be rendered.</param>
-        private void DrawImage(int x, int y, FonetImage image) {
-            int w = image.Width*1000;
-            int h = image.Height*1000;
+        private void DrawImage(int x, int y, FonetImage image)
+        {
+            int w = image.Width * 1000;
+            int h = image.Height * 1000;
             DrawImageScaled(x, y, w, h, image);
         }
 
@@ -1059,14 +1169,15 @@ namespace Fonet.Render.Pdf {
         /// <param name="h">The height in millipoints.</param>
         /// <param name="image">The image to be rendered.</param>
         private void DrawImageScaled(
-            int x, int y, int w, int h, FonetImage image) {
+            int x, int y, int w, int h, FonetImage image)
+        {
             PdfXObject xobj = this.pdfDoc.AddImage(image);
             CloseText();
 
-            currentStream.Write("ET\nq\n" + PdfNumber.doubleOut(((float) w)/1000f) + " 0 0 "
-                + PdfNumber.doubleOut(((float) h)/1000f) + " "
-                + PdfNumber.doubleOut(((float) x)/1000f) + " "
-                + PdfNumber.doubleOut(((float) (y - h))/1000f) + " cm\n" + "/" + xobj.Name.Name
+            currentStream.Write("ET\nq\n" + PdfNumber.doubleOut(((float)w) / 1000f) + " 0 0 "
+                + PdfNumber.doubleOut(((float)h) / 1000f) + " "
+                + PdfNumber.doubleOut(((float)x) / 1000f) + " "
+                + PdfNumber.doubleOut(((float)(y - h)) / 1000f) + " cm\n" + "/" + xobj.Name.Name
                 + " Do\nQ\nBT\n");
         }
 
@@ -1082,18 +1193,19 @@ namespace Fonet.Render.Pdf {
         /// <param name="image">The image to be rendered.</param>
         private void DrawImageClipped(
             int x, int y, int clipX, int clipY,
-            int clipW, int clipH, FonetImage image) {
-            float cx1 = ((float) x)/1000f;
-            float cy1 = ((float) y - clipH)/1000f;
+            int clipW, int clipH, FonetImage image)
+        {
+            float cx1 = ((float)x) / 1000f;
+            float cy1 = ((float)y - clipH) / 1000f;
 
-            float cx2 = ((float) x + clipW)/1000f;
-            float cy2 = ((float) y)/1000f;
+            float cx2 = ((float)x + clipW) / 1000f;
+            float cy2 = ((float)y) / 1000f;
 
             int imgX = x - clipX;
             int imgY = y - clipY;
 
-            int imgW = image.Width*1000;
-            int imgH = image.Height*1000;
+            int imgW = image.Width * 1000;
+            int imgH = image.Height * 1000;
 
             PdfXObject xobj = this.pdfDoc.AddImage(image);
             CloseText();
@@ -1107,10 +1219,10 @@ namespace Fonet.Render.Pdf {
                 "W\n" +
                 "n\n" +
                 // image matrix
-                PdfNumber.doubleOut(((float) imgW)/1000f) + " 0 0 " +
-                PdfNumber.doubleOut(((float) imgH)/1000f) + " " +
-                PdfNumber.doubleOut(((float) imgX)/1000f) + " " +
-                PdfNumber.doubleOut(((float) imgY - imgH)/1000f) + " cm\n" +
+                PdfNumber.doubleOut(((float)imgW) / 1000f) + " 0 0 " +
+                PdfNumber.doubleOut(((float)imgH) / 1000f) + " " +
+                PdfNumber.doubleOut(((float)imgX) / 1000f) + " " +
+                PdfNumber.doubleOut(((float)imgY - imgH) / 1000f) + " cm\n" +
                 "s\n" +
                 // the image itself
                 "/" + xobj.Name.Name + " Do\nQ\nBT\n");
@@ -1123,41 +1235,46 @@ namespace Fonet.Render.Pdf {
          * @param space the display space to render
          */
 
-        public void RenderDisplaySpace(DisplaySpace space) {
+        public void RenderDisplaySpace(DisplaySpace space)
+        {
             int d = space.getSize();
             this.currentYPosition -= d;
         }
 
         private void AddWordLines(WordArea area, int rx, int bl, int size,
-                                  PdfColor theAreaColor) {
-            if (area.getUnderlined()) {
-                int yPos = bl - size/10;
-                AddLine(rx, yPos, rx + area.getContentWidth(), yPos, size/14,
+                                  PdfColor theAreaColor)
+        {
+            if (area.getUnderlined())
+            {
+                int yPos = bl - size / 10;
+                AddLine(rx, yPos, rx + area.getContentWidth(), yPos, size / 14,
                         theAreaColor);
                 // save position for underlining a following InlineSpace
                 prevUnderlineXEndPos = rx + area.getContentWidth();
                 prevUnderlineYEndPos = yPos;
-                prevUnderlineSize = size/14;
+                prevUnderlineSize = size / 14;
                 prevUnderlineColor = theAreaColor;
             }
 
-            if (area.getOverlined()) {
-                int yPos = bl + area.GetFontState().Ascender + size/10;
-                AddLine(rx, yPos, rx + area.getContentWidth(), yPos, size/14,
+            if (area.getOverlined())
+            {
+                int yPos = bl + area.GetFontState().Ascender + size / 10;
+                AddLine(rx, yPos, rx + area.getContentWidth(), yPos, size / 14,
                         theAreaColor);
                 prevOverlineXEndPos = rx + area.getContentWidth();
                 prevOverlineYEndPos = yPos;
-                prevOverlineSize = size/14;
+                prevOverlineSize = size / 14;
                 prevOverlineColor = theAreaColor;
             }
 
-            if (area.getLineThrough()) {
-                int yPos = bl + area.GetFontState().Ascender*3/8;
-                AddLine(rx, yPos, rx + area.getContentWidth(), yPos, size/14,
+            if (area.getLineThrough())
+            {
+                int yPos = bl + area.GetFontState().Ascender * 3 / 8;
+                AddLine(rx, yPos, rx + area.getContentWidth(), yPos, size / 14,
                         theAreaColor);
                 prevLineThroughXEndPos = rx + area.getContentWidth();
                 prevLineThroughYEndPos = yPos;
-                prevLineThroughSize = size/14;
+                prevLineThroughSize = size / 14;
                 prevLineThroughColor = theAreaColor;
             }
         }
@@ -1168,10 +1285,13 @@ namespace Fonet.Render.Pdf {
          * @param space space to render
          */
 
-        public void RenderInlineSpace(InlineSpace space) {
+        public void RenderInlineSpace(InlineSpace space)
+        {
             this.currentXPosition += space.getSize();
-            if (space.getUnderlined()) {
-                if (prevUnderlineColor != null) {
+            if (space.getUnderlined())
+            {
+                if (prevUnderlineColor != null)
+                {
                     AddLine(prevUnderlineXEndPos, prevUnderlineYEndPos,
                             prevUnderlineXEndPos + space.getSize(),
                             prevUnderlineYEndPos, prevUnderlineSize,
@@ -1180,8 +1300,10 @@ namespace Fonet.Render.Pdf {
                     prevUnderlineXEndPos = prevUnderlineXEndPos + space.getSize();
                 }
             }
-            if (space.getOverlined()) {
-                if (prevOverlineColor != null) {
+            if (space.getOverlined())
+            {
+                if (prevOverlineColor != null)
+                {
                     AddLine(prevOverlineXEndPos, prevOverlineYEndPos,
                             prevOverlineXEndPos + space.getSize(),
                             prevOverlineYEndPos, prevOverlineSize,
@@ -1189,8 +1311,10 @@ namespace Fonet.Render.Pdf {
                     prevOverlineXEndPos = prevOverlineXEndPos + space.getSize();
                 }
             }
-            if (space.getLineThrough()) {
-                if (prevLineThroughColor != null) {
+            if (space.getLineThrough())
+            {
+                if (prevLineThroughColor != null)
+                {
                     AddLine(prevLineThroughXEndPos, prevLineThroughYEndPos,
                             prevLineThroughXEndPos + space.getSize(),
                             prevLineThroughYEndPos, prevLineThroughSize,
@@ -1206,7 +1330,8 @@ namespace Fonet.Render.Pdf {
          * @param area area to render
          */
 
-        public void RenderLeaderArea(LeaderArea area) {
+        public void RenderLeaderArea(LeaderArea area)
+        {
             int rx = this.currentXPosition;
             int ry = this.currentYPosition;
             int w = area.getContentWidth();
@@ -1216,28 +1341,30 @@ namespace Fonet.Render.Pdf {
 
             // checks whether thickness is = 0, because of bug in pdf (or where?),
             // a line with thickness 0 is still displayed
-            if (th != 0) {
-                switch (st) {
+            if (th != 0)
+            {
+                switch (st)
+                {
                     case RuleStyle.DOUBLE:
-                        AddLine(rx, ry, rx + w, ry, th/3, st,
+                        AddLine(rx, ry, rx + w, ry, th / 3, st,
                                 new PdfColor(area.getRed(), area.getGreen(),
                                              area.getBlue()));
-                        AddLine(rx, ry + (2*th/3), rx + w, ry + (2*th/3),
-                                th/3, st,
+                        AddLine(rx, ry + (2 * th / 3), rx + w, ry + (2 * th / 3),
+                                th / 3, st,
                                 new PdfColor(area.getRed(), area.getGreen(),
                                              area.getBlue()));
                         break;
                     case RuleStyle.GROOVE:
-                        AddLine(rx, ry, rx + w, ry, th/2, st,
+                        AddLine(rx, ry, rx + w, ry, th / 2, st,
                                 new PdfColor(area.getRed(), area.getGreen(),
                                              area.getBlue()));
-                        AddLine(rx, ry + (th/2), rx + w, ry + (th/2), th/2, st,
+                        AddLine(rx, ry + (th / 2), rx + w, ry + (th / 2), th / 2, st,
                                 new PdfColor(255, 255, 255));
                         break;
                     case RuleStyle.RIDGE:
-                        AddLine(rx, ry, rx + w, ry, th/2, st,
+                        AddLine(rx, ry, rx + w, ry, th / 2, st,
                                 new PdfColor(255, 255, 255));
-                        AddLine(rx, ry + (th/2), rx + w, ry + (th/2), th/2, st,
+                        AddLine(rx, ry + (th / 2), rx + w, ry + (th / 2), th / 2, st,
                                 new PdfColor(area.getRed(), area.getGreen(),
                                              area.getBlue()));
                         break;

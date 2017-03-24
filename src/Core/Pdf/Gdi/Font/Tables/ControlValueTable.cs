@@ -1,8 +1,12 @@
-namespace Fonet.Pdf.Gdi.Font {
+﻿//Apache2, 2017, WinterDev
+//Apache2, 2009, griffm, FO.NET
+namespace Fonet.Pdf.Gdi.Font
+{
     /// <summary>
     ///     Class that represents the Control Value table ('cvt').
     /// </summary>
-    internal class ControlValueTable : FontTable {
+    internal class ControlValueTable : FontTable
+    {
         /// <summary>
         ///     List of N values referenceable by instructions. 
         /// </summary>
@@ -13,13 +17,14 @@ namespace Fonet.Pdf.Gdi.Font {
         /// </summary>
         /// <param name="entry"></param>
         public ControlValueTable(DirectoryEntry entry)
-            : base(TableNames.Cvt, entry) {}
+            : base(TableNames.Cvt, entry) { }
 
         /// <summary>
         ///     Gets the value representing the number of values that can 
         ///     be referenced by instructions.
         /// </summary>
-        public int Count {
+        public int Count
+        {
             get { return values.Length; }
         }
 
@@ -28,9 +33,11 @@ namespace Fonet.Pdf.Gdi.Font {
         ///     in the supplied stream.
         /// </summary>
         /// <param name="reader"></param>
-        protected internal override void Read(FontFileReader reader) {
-            values = new short[Entry.Length/PrimitiveSizes.FWord];
-            for (int i = 0; i < values.Length; i++) {
+        protected internal override void Read(FontFileReader reader)
+        {
+            values = new short[Entry.Length / PrimitiveSizes.FWord];
+            for (int i = 0; i < values.Length; i++)
+            {
                 values[i] = reader.Stream.ReadFWord();
             }
         }
@@ -39,8 +46,10 @@ namespace Fonet.Pdf.Gdi.Font {
         ///     Writes out the array of values to the supplied stream.
         /// </summary>
         /// <param name="writer"></param>
-        protected internal override void Write(FontFileWriter writer) {
-            foreach (short val in values) {
+        protected internal override void Write(FontFileWriter writer)
+        {
+            foreach (short val in values)
+            {
                 writer.Stream.WriteFWord(val);
             }
         }

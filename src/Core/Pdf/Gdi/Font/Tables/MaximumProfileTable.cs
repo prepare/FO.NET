@@ -1,13 +1,17 @@
+﻿//Apache2, 2017, WinterDev
+//Apache2, 2009, griffm, FO.NET
 using System;
 
-namespace Fonet.Pdf.Gdi.Font {
+namespace Fonet.Pdf.Gdi.Font
+{
     /// <summary>
     ///     Class that represents the Horizontal Metrics ('maxp') table.
     /// </summary>
     /// <remarks>
     ///     http://www.microsoft.com/typography/otspec/maxp.htm
     /// </remarks>
-    internal class MaximumProfileTable : FontTable {
+    internal class MaximumProfileTable : FontTable
+    {
         /// <summary>
         ///     Table version number
         /// </summary>
@@ -99,12 +103,13 @@ namespace Fonet.Pdf.Gdi.Font {
         ///     class.
         /// </summary>
         /// <param name="entry"></param>
-        public MaximumProfileTable(DirectoryEntry entry) : base(TableNames.Maxp, entry) {}
+        public MaximumProfileTable(DirectoryEntry entry) : base(TableNames.Maxp, entry) { }
 
         /// <summary>
         ///     Gets the number of glyphs
         /// </summary>
-        public int GlyphCount {
+        public int GlyphCount
+        {
             get { return numGlyphs; }
             set { numGlyphs = Convert.ToUInt16(value); }
         }
@@ -114,7 +119,8 @@ namespace Fonet.Pdf.Gdi.Font {
         ///     at the current position.
         /// </summary>
         /// <param name="reader"></param>
-        protected internal override void Read(FontFileReader reader) {
+        protected internal override void Read(FontFileReader reader)
+        {
             FontFileStream stream = reader.Stream;
 
             // These two fields are common to versions 0.5 and 1.0
@@ -122,7 +128,8 @@ namespace Fonet.Pdf.Gdi.Font {
             numGlyphs = stream.ReadUShort();
 
             // Version 1.0 of this table contains more data
-            if (versionNo == 0x00010000) {
+            if (versionNo == 0x00010000)
+            {
                 maxPoints = stream.ReadUShort();
                 maxContours = stream.ReadUShort();
                 maxCompositePoints = stream.ReadUShort();
@@ -139,7 +146,8 @@ namespace Fonet.Pdf.Gdi.Font {
             }
         }
 
-        protected internal override void Write(FontFileWriter writer) {
+        protected internal override void Write(FontFileWriter writer)
+        {
             FontFileStream stream = writer.Stream;
 
             // These two fields are common to versions 0.5 and 1.0
@@ -147,7 +155,8 @@ namespace Fonet.Pdf.Gdi.Font {
             stream.WriteUShort(numGlyphs);
 
             // Version 1.0 of this table contains more data
-            if (versionNo == 0x00010000) {
+            if (versionNo == 0x00010000)
+            {
                 stream.WriteUShort(maxPoints);
                 stream.WriteUShort(maxContours);
                 stream.WriteUShort(maxCompositePoints);

@@ -1,6 +1,9 @@
+﻿//Apache2, 2017, WinterDev
+//Apache2, 2009, griffm, FO.NET
 using System;
 
-namespace Fonet.Pdf.Gdi.Font {
+namespace Fonet.Pdf.Gdi.Font
+{
     /// <summary>
     ///     Class that represents the OS/2 ('OS/2') table
     /// </summary>
@@ -10,7 +13,8 @@ namespace Fonet.Pdf.Gdi.Font {
     ///     <p>For more details on the Panose classification metrics, visit the following URL:
     ///     http://www.panose.com/hardware/pan2.asp</p>
     /// </remarks>
-    internal class OS2Table : FontTable {
+    internal class OS2Table : FontTable
+    {
         private const int OldStyleSerifs = 1;
         private const int TransitionalSerifs = 2;
         private const int ModernSerifs = 3;
@@ -60,13 +64,14 @@ namespace Fonet.Pdf.Gdi.Font {
         private ushort usBreakChar;
         private ushort usMaxContext;
 
-        public OS2Table(DirectoryEntry entry) : base(TableNames.Os2, entry) {}
+        public OS2Table(DirectoryEntry entry) : base(TableNames.Os2, entry) { }
 
         /// <summary>
         ///     Gets a boolean value that indicates whether this font contains 
         ///     italic characters.
         /// </summary>
-        public bool IsItalic {
+        public bool IsItalic
+        {
             get { return ((fsSelection & 0x01) == 0x01); }
         }
 
@@ -74,7 +79,8 @@ namespace Fonet.Pdf.Gdi.Font {
         ///     Gets a boolean value that indicates whether characters are 
         ///     in the standard weight/style.
         /// </summary>
-        public bool IsRegular {
+        public bool IsRegular
+        {
             get { return ((fsSelection & 0x40) == 0x40); }
         }
 
@@ -82,7 +88,8 @@ namespace Fonet.Pdf.Gdi.Font {
         ///     Gets a boolean value that indicates whether characters possess
         ///     a weight greater than or equal to 700.
         /// </summary>
-        public bool IsBold {
+        public bool IsBold
+        {
             get { return ((fsSelection & 0x20) == 0x20) || (usWeightClass >= 700); }
         }
 
@@ -90,7 +97,8 @@ namespace Fonet.Pdf.Gdi.Font {
         ///     Gets a boolean value that indicates whether this font contains 
         ///     characters that all have the same width.
         /// </summary>
-        public bool IsMonospaced {
+        public bool IsMonospaced
+        {
             get { return (panose[3] == 9); }
         }
 
@@ -98,7 +106,8 @@ namespace Fonet.Pdf.Gdi.Font {
         ///     Gets a boolean value that indicates whether this font contains 
         ///     special characters such as dingbats, icons, etc.
         /// </summary>
-        public bool IsSymbolic {
+        public bool IsSymbolic
+        {
             get { return (classID == Symbolic); }
         }
 
@@ -106,8 +115,10 @@ namespace Fonet.Pdf.Gdi.Font {
         ///     Gets a boolean value that indicates whether characters  
         ///     do possess serifs
         /// </summary>
-        public bool IsSerif {
-            get {
+        public bool IsSerif
+        {
+            get
+            {
                 return (classID == OldStyleSerifs ||
                     classID == TransitionalSerifs ||
                     classID == ModernSerifs ||
@@ -121,7 +132,8 @@ namespace Fonet.Pdf.Gdi.Font {
         ///     Gets a boolean value that indicates whether characters 
         ///     are designed to simulate hand writing.
         /// </summary>
-        public bool IsScript {
+        public bool IsScript
+        {
             get { return (classID == Scripts); }
         }
 
@@ -129,7 +141,8 @@ namespace Fonet.Pdf.Gdi.Font {
         ///     Gets a boolean value that indicates whether characters  
         ///     do not possess serifs
         /// </summary>
-        public bool IsSansSerif {
+        public bool IsSansSerif
+        {
             get { return (classID == SansSerif); }
         }
 
@@ -137,23 +150,28 @@ namespace Fonet.Pdf.Gdi.Font {
         ///     Gets a boolean value that indicates whether this font may be 
         ///     legally embedded.
         /// </summary>
-        public bool IsEmbeddable {
+        public bool IsEmbeddable
+        {
             get { return (InstallableEmbedding || EditableEmbedding || PreviewAndPrintEmbedding); }
         }
 
-        public bool InstallableEmbedding {
+        public bool InstallableEmbedding
+        {
             get { return (fsType == 0); }
         }
 
-        public bool RestricedLicenseEmbedding {
+        public bool RestricedLicenseEmbedding
+        {
             get { return ((fsType & 0x0002) == 0x0002); }
         }
 
-        public bool EditableEmbedding {
+        public bool EditableEmbedding
+        {
             get { return ((fsType & 0x0008) == 0x0008); }
         }
 
-        public bool PreviewAndPrintEmbedding {
+        public bool PreviewAndPrintEmbedding
+        {
             get { return ((fsType & 0x0004) == 0x0004); }
         }
 
@@ -161,23 +179,28 @@ namespace Fonet.Pdf.Gdi.Font {
         ///     Gets a boolean value that indicates whether this font may be 
         ///     subsetted.
         /// </summary>
-        public bool IsSubsettable {
+        public bool IsSubsettable
+        {
             get { return ((fsType & 0x0100) != 0x0100); }
         }
 
-        public int CapHeight {
+        public int CapHeight
+        {
             get { return sCapHeight; }
         }
 
-        public int XHeight {
+        public int XHeight
+        {
             get { return sxHeight; }
         }
 
-        public ushort FirstChar {
+        public ushort FirstChar
+        {
             get { return usFirstCharIndex; }
         }
 
-        public ushort LastChar {
+        public ushort LastChar
+        {
             get { return usLastCharIndex; }
         }
 
@@ -186,14 +209,15 @@ namespace Fonet.Pdf.Gdi.Font {
         ///     at the current position.
         /// </summary>
         /// <param name="reader"></param>
-        protected internal override void Read(FontFileReader reader) {
+        protected internal override void Read(FontFileReader reader)
+        {
             FontFileStream stream = reader.Stream;
             version = stream.ReadUShort();
             avgCharWidth = stream.ReadShort();
             usWeightClass = stream.ReadUShort();
             usWidthClass = stream.ReadUShort();
             // According to the OpenType spec, bit 0 must be zero.
-            fsType = (ushort) (stream.ReadUShort() & ~1);
+            fsType = (ushort)(stream.ReadUShort() & ~1);
             subscriptXSize = stream.ReadShort();
             subscriptYSize = stream.ReadShort();
             subscriptXOffset = stream.ReadShort();
@@ -205,8 +229,8 @@ namespace Fonet.Pdf.Gdi.Font {
             strikeoutSize = stream.ReadShort();
             strikeoutPosition = stream.ReadShort();
             short familyClass = stream.ReadShort();
-            classID = (byte) (familyClass >> 8);
-            subclassID = (byte) (familyClass & 255);
+            classID = (byte)(familyClass >> 8);
+            subclassID = (byte)(familyClass & 255);
             stream.Read(panose, 0, panose.Length);
             unicodeRange1 = stream.ReadULong();
             unicodeRange2 = stream.ReadULong();
@@ -233,7 +257,8 @@ namespace Fonet.Pdf.Gdi.Font {
             usMaxContext = stream.ReadUShort();
         }
 
-        protected internal override void Write(FontFileWriter writer) {
+        protected internal override void Write(FontFileWriter writer)
+        {
             throw new NotImplementedException("Write is not implemented.");
         }
     }

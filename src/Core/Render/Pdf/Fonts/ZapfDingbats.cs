@@ -1,14 +1,19 @@
-namespace Fonet.Render.Pdf.Fonts {
-    internal class ZapfDingbats : Base14Font {
+﻿//Apache2, 2017, WinterDev
+//Apache2, 2009, griffm, FO.NET
+namespace Fonet.Render.Pdf.Fonts
+{
+    internal class ZapfDingbats : Base14Font
+    {
         private static readonly int[] CodePointWidths;
 
         private static readonly CodePointMapping DefaultMapping
             = CodePointMapping.GetMapping("ZapfDingbatsEncoding");
 
         public ZapfDingbats()
-            : base("ZapfDingbats", null, 820, 802, -143, 32, 255, CodePointWidths, DefaultMapping) {}
+            : base("ZapfDingbats", null, 820, 802, -143, 32, 255, CodePointWidths, DefaultMapping) { }
 
-        static ZapfDingbats() {
+        static ZapfDingbats()
+        {
             CodePointWidths = new int[256];
             CodePointWidths[0x0020] = 278;
             CodePointWidths[0x0021] = 974;

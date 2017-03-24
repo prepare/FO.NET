@@ -1,12 +1,16 @@
+﻿//Apache2, 2017, WinterDev
+//Apache2, 2009, griffm, FO.NET
 using System.Runtime.InteropServices;
 
-namespace Fonet.Pdf.Gdi {
+namespace Fonet.Pdf.Gdi
+{
     /// <summary>
     ///     The OUTLINETEXTMETRIC structure contains metrics describing 
     ///     a TrueType font. 
     /// </summary>
-    [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Auto)]
-    internal struct OutlineTextMetric {
+    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
+    internal struct OutlineTextMetric
+    {
         public uint otmSize;
         public TextMetric otmTextMetrics;
         public byte otmFiller;
@@ -39,7 +43,7 @@ namespace Fonet.Pdf.Gdi {
         public uint otmpFaceName;
         public uint otmpStyleName;
         public uint otmpFullName;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst=512)] public char[] nameBuffer;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 512)] public char[] nameBuffer;
     }
 
 }

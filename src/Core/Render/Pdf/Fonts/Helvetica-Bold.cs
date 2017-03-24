@@ -1,14 +1,19 @@
-namespace Fonet.Render.Pdf.Fonts {
-    internal class HelveticaBold : Base14Font {
+﻿//Apache2, 2017, WinterDev
+//Apache2, 2009, griffm, FO.NET
+namespace Fonet.Render.Pdf.Fonts
+{
+    internal class HelveticaBold : Base14Font
+    {
         private static readonly int[] CodePointWidths;
 
         private static readonly CodePointMapping DefaultMapping
             = CodePointMapping.GetMapping("WinAnsiEncoding");
 
         public HelveticaBold()
-            : base("Helvetica-Bold", "WinAnsiEncoding", 718, 718, -207, 32, 255, CodePointWidths, DefaultMapping) {}
+            : base("Helvetica-Bold", "WinAnsiEncoding", 718, 718, -207, 32, 255, CodePointWidths, DefaultMapping) { }
 
-        static HelveticaBold() {
+        static HelveticaBold()
+        {
             CodePointWidths = new int[256];
             CodePointWidths[0x0041] = 722;
             CodePointWidths[0x00C6] = 1000;

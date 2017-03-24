@@ -1,10 +1,14 @@
+﻿//Apache2, 2017, WinterDev
+//Apache2, 2009, griffm, FO.NET
 using System;
 
-namespace Fonet.Pdf.Gdi {
+namespace Fonet.Pdf.Gdi
+{
     /// <summary>
     ///     A very lightweight wrapper around a Win32 device context
     /// </summary>
-    public class GdiDeviceContent : IDisposable {
+    public class GdiDeviceContent : IDisposable
+    {
         /// <summary>
         ///     Pointer to device context created by ::CreateDC()
         /// </summary>
@@ -13,7 +17,8 @@ namespace Fonet.Pdf.Gdi {
         /// <summary>
         ///     Creates a new device context that matches the desktop display surface
         /// </summary>
-        public GdiDeviceContent() {
+        public GdiDeviceContent()
+        {
             //this.hDC = LibWrapper.CreateDC("Display", String.Empty, null, IntPtr.Zero);
             this.hDC = LibWrapper.GetDC(IntPtr.Zero);
         }
@@ -21,11 +26,13 @@ namespace Fonet.Pdf.Gdi {
         /// <summary>
         ///     Invokes <see cref="Dispose(bool)"/>.
         /// </summary>
-        ~GdiDeviceContent() {
+        ~GdiDeviceContent()
+        {
             Dispose(false);
         }
 
-        public virtual void Dispose() {
+        public virtual void Dispose()
+        {
             Dispose(true);
             GC.SuppressFinalize(this);
         }
@@ -33,8 +40,10 @@ namespace Fonet.Pdf.Gdi {
         /// <summary>
         ///     Delete the device context freeing the associated memory.
         /// </summary>
-        protected virtual void Dispose(bool disposing) {
-            if (hDC != IntPtr.Zero) {
+        protected virtual void Dispose(bool disposing)
+        {
+            if (hDC != IntPtr.Zero)
+            {
                 LibWrapper.DeleteDC(hDC);
 
                 // Mark as deleted
@@ -48,7 +57,8 @@ namespace Fonet.Pdf.Gdi {
         /// </summary>
         /// <param name="font">Handle to object.</param>
         /// <returns>A handle to the object being replaced.</returns>
-        public IntPtr SelectFont(GdiFont font) {
+        public IntPtr SelectFont(GdiFont font)
+        {
             return LibWrapper.SelectObject(hDC, font.Handle);
         }
 
@@ -56,14 +66,16 @@ namespace Fonet.Pdf.Gdi {
         ///     Gets a handle to an object of the specified type that has been 
         ///     selected into this device context. 
         /// </summary>
-        public IntPtr GetCurrentObject(GdiDcObject objectType) {
+        public IntPtr GetCurrentObject(GdiDcObject objectType)
+        {
             return LibWrapper.GetCurrentObject(hDC, objectType);
         }
 
         /// <summary>
         ///     Returns a handle to the underlying device context
         /// </summary>
-        internal IntPtr Handle {
+        internal IntPtr Handle
+        {
             get { return hDC; }
         }
     }
