@@ -7,7 +7,8 @@ using System.Reflection;
 using System.Text;
 using Fonet.Pdf.Gdi;
 
-namespace Fonet.Render.Pdf {
+namespace Fonet.Render.Pdf
+{
     /// <summary>
     ///     This class can be used to control various properties of PDF files
     ///     created by FO.NET.
@@ -19,7 +20,8 @@ namespace Fonet.Render.Pdf {
     ///     This class also allows security settings to be specified that will 
     ///     cause generated PDF files to be encrypted and optionally password protected.
     /// </remarks>
-    public sealed class PdfRendererOptions {
+    public sealed class PdfRendererOptions
+    {
         private string author;
 
         private string subject;
@@ -53,7 +55,8 @@ namespace Fonet.Render.Pdf {
         /// <remarks>
         ///     This value will be embedded in the PDF information dictionary.
         /// </remarks>
-        public string Title {
+        public string Title
+        {
             get { return title; }
             set { title = value; }
         }
@@ -67,7 +70,8 @@ namespace Fonet.Render.Pdf {
         /// <remarks>
         ///     This value will be embedded in the PDF information dictionary.
         /// </remarks>
-        public string Subject {
+        public string Subject
+        {
             get { return subject; }
             set { subject = value; }
         }
@@ -81,7 +85,8 @@ namespace Fonet.Render.Pdf {
         /// <remarks>
         ///     This value will be embedded in the PDF information dictionary.
         /// </remarks>
-        public string Author {
+        public string Author
+        {
             get { return author; }
             set { author = value; }
         }
@@ -92,7 +97,8 @@ namespace Fonet.Render.Pdf {
         /// <value>
         ///     This method will always return "XSL-FO http://www.w3.org/1999/XSL/Format".
         /// </value>
-        internal string Creator {
+        internal string Creator
+        {
             get { return "XSL-FO http://www.w3.org/1999/XSL/Format"; }
         }
 
@@ -102,8 +108,10 @@ namespace Fonet.Render.Pdf {
         /// <value>
         ///     This method will return the assembly name and version of FO.NET.
         /// </value>
-        internal string Producer {
-            get {
+        internal string Producer
+        {
+            get
+            {
                 AssemblyName assemName = Assembly.GetExecutingAssembly().GetName();
                 return assemName.FullName + ", " + assemName.Version;
             }
@@ -115,13 +123,18 @@ namespace Fonet.Render.Pdf {
         /// <value>
         ///     If no keywords exist the empty string <see cref="String.Empty"/> is returned
         /// </value>
-        internal string Keywords {
-            get {
+        internal string Keywords
+        {
+            get
+            {
                 StringBuilder sb = new StringBuilder();
-                if (keywords != null) {
-                    for (int i = 0, j = keywords.Count; i < j; i++) {
+                if (keywords != null)
+                {
+                    for (int i = 0, j = keywords.Count; i < j; i++)
+                    {
                         sb.Append(keywords[i]);
-                        if (i != j - 1) {
+                        if (i != j - 1)
+                        {
                             sb.Append(", ");
                         }
                     }
@@ -137,8 +150,10 @@ namespace Fonet.Render.Pdf {
         ///     Keywords are embedded in the PDF information dictionary.
         /// </remarks>
         /// <param name="keyword">The keyword to be added.</param>
-        public void AddKeyword(string keyword) {
-            if (keywords == null) {
+        public void AddKeyword(string keyword)
+        {
+            if (keywords == null)
+            {
                 keywords = new StringCollection();
             }
             keywords.Add(keyword);
@@ -154,7 +169,8 @@ namespace Fonet.Render.Pdf {
         /// <value>
         ///     The default value is null.
         /// </value>
-        public string OwnerPassword {
+        public string OwnerPassword
+        {
             get { return ownerPassword; }
             set { ownerPassword = value; }
         }
@@ -169,7 +185,8 @@ namespace Fonet.Render.Pdf {
         /// <value>
         ///     The default value is null.
         /// </value>
-        public string UserPassword {
+        public string UserPassword
+        {
             get { return userPassword; }
             set { userPassword = value; }
         }
@@ -177,14 +194,16 @@ namespace Fonet.Render.Pdf {
         /// <summary>
         ///     Returns true if any permissions have been set.
         /// </summary>
-        internal bool HasPermissions {
+        internal bool HasPermissions
+        {
             get { return permissions.Data != -4; }
         }
 
         /// <summary>
         ///     Returns the PDF permissions encoded as an 32-bit integer.
         /// </summary>
-        internal int Permissions {
+        internal int Permissions
+        {
             get { return permissions.Data; }
         }
 
@@ -194,7 +213,8 @@ namespace Fonet.Render.Pdf {
         /// <value>
         ///     The default value is true.
         /// </value>
-        public bool EnablePrinting {
+        public bool EnablePrinting
+        {
             get { return permissions[4]; }
             set { permissions[4] = value; }
         }
@@ -206,7 +226,8 @@ namespace Fonet.Render.Pdf {
         /// <value>
         ///     The default value is true.
         /// </value>
-        public bool EnableModify {
+        public bool EnableModify
+        {
             get { return permissions[8]; }
             set { permissions[8] = value; }
         }
@@ -217,7 +238,8 @@ namespace Fonet.Render.Pdf {
         /// <value>
         ///     The default value is true.
         /// </value>
-        public bool EnableCopy {
+        public bool EnableCopy
+        {
             get { return permissions[16]; }
             set { permissions[16] = value; }
         }
@@ -229,7 +251,8 @@ namespace Fonet.Render.Pdf {
         /// <value>
         ///     The default value is true.
         /// </value>
-        public bool EnableAdd {
+        public bool EnableAdd
+        {
             get { return permissions[32]; }
             set { permissions[32] = value; }
         }
@@ -240,7 +263,8 @@ namespace Fonet.Render.Pdf {
         /// <value>
         ///     The default value is FontType.Link
         /// </value>
-        public FontType FontType {
+        public FontType FontType
+        {
             get { return fontType; }
             set { fontType = value; }
         }
@@ -251,7 +275,8 @@ namespace Fonet.Render.Pdf {
         /// <value>
         ///     The default value is <b>false</b>
         /// </value>
-        public bool Kerning {
+        public bool Kerning
+        {
             get { return enableKerning; }
             set { enableKerning = value; }
         }
@@ -274,7 +299,8 @@ namespace Fonet.Render.Pdf {
         /// <exception cref="ArgumentException">
         ///     If <i>fileInfo</i> cannot be added to the system font collection.
         /// </exception>
-        public void AddPrivateFont(FileInfo fileInfo) {
+        public void AddPrivateFont(FileInfo fileInfo)
+        {
             privateFonts.AddFontFile(fileInfo);
         }
     }

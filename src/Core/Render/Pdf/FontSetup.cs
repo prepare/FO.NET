@@ -8,7 +8,8 @@ using Fonet.Render.Pdf.Fonts;
 using Fonet.Pdf;
 using Fonet.Pdf.Gdi;
 
-namespace Fonet.Render.Pdf {
+namespace Fonet.Render.Pdf
+{
     /// <summary>
     ///     Sets up the PDF fonts.
     /// </summary>
@@ -16,7 +17,8 @@ namespace Fonet.Render.Pdf {
     ///     Assigns the font (with metrics) to internal names like "F1" and
     ///     assigns family-style-weight triplets to the fonts.
     /// </remarks>
-    internal class FontSetup {
+    internal class FontSetup
+    {
         /// <summary>
         ///     First 16 indices are used by base 14 and generic fonts
         /// </summary>
@@ -27,7 +29,8 @@ namespace Fonet.Render.Pdf {
         /// </summary>
         private FontInfo fontInfo;
 
-        public FontSetup(FontInfo fontInfo, FontType proxyFontType) {
+        public FontSetup(FontInfo fontInfo, FontType proxyFontType)
+        {
             this.fontInfo = fontInfo;
 
             // Add the base 14 fonts
@@ -43,15 +46,19 @@ namespace Fonet.Render.Pdf {
         ///     triplets for lookup.
         /// </remarks>
         /// <param name="fontType">Determines what type of font to instantiate.</param>
-        private void AddSystemFonts(FontType fontType) {
+        private void AddSystemFonts(FontType fontType)
+        {
             GdiFontEnumerator enumerator = new GdiFontEnumerator(new GdiDeviceContent());
-            foreach (string familyName in enumerator.FamilyNames) {
-                if (IsBase14FontName(familyName)) {
+            foreach (string familyName in enumerator.FamilyNames)
+            {
+                if (IsBase14FontName(familyName))
+                {
                     FonetDriver.ActiveDriver.FireFonetWarning(
                         "Will ignore TrueType font '" + familyName + "' because a base 14 font with the same name already exists.");
 
                 }
-                else {
+                else
+                {
                     FontStyles styles = enumerator.GetStyles(familyName);
 
                     string name = GetNextAvailableName();
@@ -87,8 +94,10 @@ namespace Fonet.Render.Pdf {
         /// </summary>
         /// <param name="familyName"></param>
         /// <returns></returns>
-        private bool IsBase14FontName(string familyName) {
-            switch (familyName) {
+        private bool IsBase14FontName(string familyName)
+        {
+            switch (familyName)
+            {
                 case "any":
                 case "sans-serif":
                 case "serif":
@@ -109,11 +118,13 @@ namespace Fonet.Render.Pdf {
         ///     integer prefixed by the letter 'F'.
         /// </summary>
         /// <returns></returns>
-        private string GetNextAvailableName() {
+        private string GetNextAvailableName()
+        {
             return String.Format("F{0}", startIndex++);
         }
 
-        private void AddBase14Fonts() {
+        private void AddBase14Fonts()
+        {
             fontInfo.AddMetrics("F1", Base14Font.Helvetica);
             fontInfo.AddMetrics("F2", Base14Font.HelveticaItalic);
             fontInfo.AddMetrics("F3", Base14Font.HelveticaBold);
@@ -182,10 +193,12 @@ namespace Fonet.Render.Pdf {
         /// </summary>
         /// <param name="fontCreator">Object that creates PdfFont objects.</param>
         /// <param name="resources">Resources object to add fonts too.</param>
-        internal void AddToResources(PdfFontCreator fontCreator, PdfResources resources) {
+        internal void AddToResources(PdfFontCreator fontCreator, PdfResources resources)
+        {
             Hashtable fonts = fontInfo.GetUsedFonts();
-            foreach (string fontName in fonts.Keys) {
-                Font font = (Font) fonts[fontName];
+            foreach (string fontName in fonts.Keys)
+            {
+                Font font = (Font)fonts[fontName];
                 resources.AddFont(fontCreator.MakeFont(fontName, font));
             }
         }

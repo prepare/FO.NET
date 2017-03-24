@@ -2,8 +2,10 @@
 //Apache2, 2009, griffm, FO.NET
 using System.Collections;
 
-namespace Fonet.Render.Pdf {
-    internal class CodePointMapping {
+namespace Fonet.Render.Pdf
+{
+    internal class CodePointMapping
+    {
         private static Hashtable mappings = new Hashtable();
 
         private string name;
@@ -11,33 +13,42 @@ namespace Fonet.Render.Pdf {
         private ushort[] characters;
         private ushort[] codepoints;
 
-        private CodePointMapping(string name, int[] table) {
+        private CodePointMapping(string name, int[] table)
+        {
             this.name = name;
             int nonLatin1 = 0;
             latin1Map = new ushort[256];
-            for (int i = 0; i < table.Length; i += 2) {
-                if (table[i + 1] < 256) {
-                    latin1Map[table[i + 1]] = (char) table[i];
+            for (int i = 0; i < table.Length; i += 2)
+            {
+                if (table[i + 1] < 256)
+                {
+                    latin1Map[table[i + 1]] = (char)table[i];
                 }
-                else {
+                else
+                {
                     ++nonLatin1;
                 }
             }
             characters = new ushort[nonLatin1];
             codepoints = new ushort[nonLatin1];
             int top = 0;
-            for (int i = 0; i < table.Length; i += 2) {
-                char c = (char) table[i + 1];
-                if (c >= 256) {
+            for (int i = 0; i < table.Length; i += 2)
+            {
+                char c = (char)table[i + 1];
+                if (c >= 256)
+                {
                     ++top;
-                    for (int j = top - 1; j >= 0; --j) {
-                        if (j > 0 && characters[j - 1] >= c) {
+                    for (int j = top - 1; j >= 0; --j)
+                    {
+                        if (j > 0 && characters[j - 1] >= c)
+                        {
                             characters[j] = characters[j - 1];
                             codepoints[j] = codepoints[j - 1];
                         }
-                        else {
+                        else
+                        {
                             characters[j] = c;
-                            codepoints[j] = (char) table[i];
+                            codepoints[j] = (char)table[i];
                             break;
                         }
                     }
@@ -45,89 +56,108 @@ namespace Fonet.Render.Pdf {
             }
         }
 
-        public ushort MapCharacter(char c) {
-            if (c < 256) {
+        public ushort MapCharacter(char c)
+        {
+            if (c < 256)
+            {
                 return latin1Map[c];
             }
-            else {
+            else
+            {
                 int bot = 0, top = characters.Length - 1;
-                while (top >= bot) {
-                    int mid = (bot + top)/2;
+                while (top >= bot)
+                {
+                    int mid = (bot + top) / 2;
                     ushort mc = characters[mid];
 
-                    if (c == mc) {
+                    if (c == mc)
+                    {
                         return codepoints[mid];
                     }
-                    else if (c < mc) {
+                    else if (c < mc)
+                    {
                         top = mid - 1;
                     }
-                    else {
+                    else
+                    {
                         bot = mid + 1;
                     }
                 }
-                return (ushort) 0;
+                return (ushort)0;
             }
         }
 
-        public string Name {
+        public string Name
+        {
             get { return name; }
         }
 
-        public static CodePointMapping GetMapping(string encoding) {
-            CodePointMapping mapping = (CodePointMapping) mappings[encoding];
-            if (mapping != null) {
+        public static CodePointMapping GetMapping(string encoding)
+        {
+            CodePointMapping mapping = (CodePointMapping)mappings[encoding];
+            if (mapping != null)
+            {
                 return mapping;
 
             }
-            else if (encoding.Equals("StandardEncoding")) {
+            else if (encoding.Equals("StandardEncoding"))
+            {
                 mapping = new CodePointMapping("StandardEncoding", encStandardEncoding);
                 mappings["StandardEncoding"] = mapping;
                 return mapping;
 
             }
-            else if (encoding.Equals("ISOLatin1Encoding")) {
+            else if (encoding.Equals("ISOLatin1Encoding"))
+            {
                 mapping = new CodePointMapping("ISOLatin1Encoding", encISOLatin1Encoding);
                 mappings["ISOLatin1Encoding"] = mapping;
                 return mapping;
 
             }
-            else if (encoding.Equals("CEEncoding")) {
+            else if (encoding.Equals("CEEncoding"))
+            {
                 mapping = new CodePointMapping("CEEncoding", encCEEncoding);
                 mappings["CEEncoding"] = mapping;
                 return mapping;
 
             }
-            else if (encoding.Equals("MacRomanEncoding")) {
+            else if (encoding.Equals("MacRomanEncoding"))
+            {
                 mapping = new CodePointMapping("MacRomanEncoding", encMacRomanEncoding);
                 mappings["MacRomanEncoding"] = mapping;
                 return mapping;
 
             }
-            else if (encoding.Equals("WinAnsiEncoding")) {
+            else if (encoding.Equals("WinAnsiEncoding"))
+            {
                 mapping = new CodePointMapping("WinAnsiEncoding", encWinAnsiEncoding);
                 mappings["WinAnsiEncoding"] = mapping;
                 return mapping;
 
             }
-            else if (encoding.Equals("PDFDocEncoding")) {
+            else if (encoding.Equals("PDFDocEncoding"))
+            {
                 mapping = new CodePointMapping("PDFDocEncoding", encPDFDocEncoding);
                 mappings["PDFDocEncoding"] = mapping;
                 return mapping;
 
             }
-            else if (encoding.Equals("SymbolEncoding")) {
+            else if (encoding.Equals("SymbolEncoding"))
+            {
                 mapping = new CodePointMapping("SymbolEncoding", encSymbolEncoding);
                 mappings["SymbolEncoding"] = mapping;
                 return mapping;
 
             }
-            else if (encoding.Equals("ZapfDingbatsEncoding")) {
+            else if (encoding.Equals("ZapfDingbatsEncoding"))
+            {
                 mapping = new CodePointMapping("ZapfDingbatsEncoding", encZapfDingbatsEncoding);
                 mappings["ZapfDingbatsEncoding"] = mapping;
                 return mapping;
 
             }
-            else {
+            else
+            {
                 return null;
             }
         }
