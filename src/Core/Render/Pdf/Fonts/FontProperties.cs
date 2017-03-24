@@ -1,3 +1,5 @@
+﻿//Apache2, 2017, WinterDev
+//Apache2, 2009, griffm, FO.NET
 namespace Fonet.Render.Pdf.Fonts {
     /// <summary>
     ///     Collection of font properties such as face name and whether the 

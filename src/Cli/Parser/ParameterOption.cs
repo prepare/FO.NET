@@ -1,4 +1,6 @@
-﻿namespace Fonet.Cli.Parser
+﻿//Apache2, 2017, WinterDev
+//Apache2, 2009, griffm, FO.NET
+namespace Fonet.Cli.Parser
 {
     /// <summary>
     /// An option that expects a parameter.

@@ -1,3 +1,5 @@
+﻿//Apache2, 2017, WinterDev
+//Apache2, 2009, griffm, FO.NET
 namespace Fonet.Render.Pdf.Fonts {
     internal class HelveticaOblique : Base14Font {
         private static readonly int[] CodePointWidths;
