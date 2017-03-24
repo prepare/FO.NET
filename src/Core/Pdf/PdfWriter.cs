@@ -144,7 +144,7 @@ namespace Fonet.Pdf
 
 
 #if DEBUG
-        int dbugWriteLineCount;
+        int dbugWriteLineCount=0;
         void dbugLineCheck()
         {
             if (dbugWriteLineCount == 4)
@@ -158,11 +158,11 @@ namespace Fonet.Pdf
         {
 #if DEBUG
 
-            byte[] dbugWriteLineInfo = System.Text.Encoding.ASCII.GetBytes(
-                ("\r\n % dbug_line:" + dbugWriteLineCount + "\r\n").ToCharArray());
-            stream.Write(dbugWriteLineInfo, 0, dbugWriteLineInfo.Length);
-            position += dbugWriteLineInfo.Length;
-            dbugWriteLineCount++;
+            //byte[] dbugWriteLineInfo = System.Text.Encoding.ASCII.GetBytes(
+            //    ("\r\n % dbug_line:" + dbugWriteLineCount + "\r\n").ToCharArray());
+            //stream.Write(dbugWriteLineInfo, 0, dbugWriteLineInfo.Length);
+            //position += dbugWriteLineInfo.Length;
+            //dbugWriteLineCount++;
 #endif
             stream.Write(newLine, 0, newLine.Length);
             position += newLine.Length;
