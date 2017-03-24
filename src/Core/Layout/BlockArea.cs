@@ -1,3 +1,5 @@
+﻿//Apache2, 2017, WinterDev
+//Apache2, 2009, griffm, FO.NET
 using System.Collections;
 using Fonet.Fo.Flow;
 using Fonet.Render.Pdf;

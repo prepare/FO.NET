@@ -1,14 +1,18 @@
+﻿//Apache2, 2017, WinterDev
+//Apache2, 2009, griffm, FO.NET
 using System;
 using System.Text;
 
-namespace Fonet.Pdf.Gdi.Font {
+namespace Fonet.Pdf.Gdi.Font
+{
     /// <summary>
     ///     Class that represents the Naming ('name') table
     /// </summary>
     /// <remarks>
     ///     http://www.microsoft.com/typography/otspec/name.htm
     /// </remarks>
-    internal class NameTable : FontTable {
+    internal class NameTable : FontTable
+    {
         // Platform identifiers
         private const int MicrosoftPlatformID = 3;
 
@@ -36,12 +40,13 @@ namespace Fonet.Pdf.Gdi.Font {
         private ushort storageOffset;
 
         public NameTable(DirectoryEntry entry)
-            : base(TableNames.Name, entry) {}
+            : base(TableNames.Name, entry) { }
 
         /// <summary>
         ///     Get the font family name.
         /// </summary>
-        public string FamilyName {
+        public string FamilyName
+        {
             get { return familyName; }
         }
 
@@ -49,7 +54,8 @@ namespace Fonet.Pdf.Gdi.Font {
         ///     Gets the font full name composed of the family name and the 
         ///     subfamily name.
         /// </summary>
-        public string FullName {
+        public string FullName
+        {
             get { return fullName; }
         }
 
@@ -58,7 +64,8 @@ namespace Fonet.Pdf.Gdi.Font {
         ///     at the current position.
         /// </summary>
         /// <param name="reader"></param>
-        protected internal override void Read(FontFileReader reader) {
+        protected internal override void Read(FontFileReader reader)
+        {
             FontFileStream stream = reader.Stream;
 
             // Ignore format selector field
@@ -70,7 +77,8 @@ namespace Fonet.Pdf.Gdi.Font {
             // Offset to start of string storage (from start of table).
             storageOffset = stream.ReadUShort();
 
-            for (int i = 0; i < numRecords; i++) {
+            for (int i = 0; i < numRecords; i++)
+            {
                 int platformID = stream.ReadUShort();
                 int encodingID = stream.ReadUShort();
                 int languageID = stream.ReadUShort();
@@ -82,8 +90,10 @@ namespace Fonet.Pdf.Gdi.Font {
                 // Unicode encoding and US English language.
                 if (platformID == MicrosoftPlatformID &&
                     (encodingID == SymbolEncoding || encodingID == UnicodeEncoding) &&
-                    languageID == EnglishAmericanLanguage) {
-                    switch (nameID) {
+                    languageID == EnglishAmericanLanguage)
+                {
+                    switch (nameID)
+                    {
                         case FamilyNameID:
                             familyName = ReadString(stream, stringOffset, length);
                             break;
@@ -92,7 +102,8 @@ namespace Fonet.Pdf.Gdi.Font {
                             break;
                     }
 
-                    if (familyName != String.Empty && fullName != String.Empty) {
+                    if (familyName != String.Empty && fullName != String.Empty)
+                    {
                         break;
                     }
                 }
@@ -110,7 +121,8 @@ namespace Fonet.Pdf.Gdi.Font {
         ///  </param>
         /// <param name="length">The length of the string in bytes.</param>
         /// <returns></returns>
-        private string ReadString(FontFileStream stream, int stringOffset, int length) {
+        private string ReadString(FontFileStream stream, int stringOffset, int length)
+        {
             // Set a restore point
             stream.SetRestorePoint();
 
@@ -130,7 +142,8 @@ namespace Fonet.Pdf.Gdi.Font {
         ///     Not supported.
         /// </summary>
         /// <param name="writer"></param>
-        protected internal override void Write(FontFileWriter writer) {
+        protected internal override void Write(FontFileWriter writer)
+        {
             throw new NotImplementedException("Write is not implemented.");
         }
     }

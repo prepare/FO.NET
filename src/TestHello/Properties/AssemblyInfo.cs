@@ -1,4 +1,6 @@
-﻿using System.Reflection;
+﻿//Apache2, 2017, WinterDev
+//Apache2, 2009, griffm, FO.NET
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 

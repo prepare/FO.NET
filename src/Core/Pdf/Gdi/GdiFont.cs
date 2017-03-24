@@ -1,10 +1,14 @@
+﻿//Apache2, 2017, WinterDev
+//Apache2, 2009, griffm, FO.NET
 using System;
 
-namespace Fonet.Pdf.Gdi {
+namespace Fonet.Pdf.Gdi
+{
     /// <summary>
     ///     A thin wrapper around a handle to a font
     /// </summary>
-    public class GdiFont {
+    public class GdiFont
+    {
         private IntPtr hFont;
         private string faceName;
         private int height;
@@ -13,7 +17,8 @@ namespace Fonet.Pdf.Gdi {
         ///     Class constructor
         /// </summary>
         /// <param name="hFont">A handle to an existing font.</param>
-        public GdiFont(IntPtr hFont, string faceName, int height) {
+        public GdiFont(IntPtr hFont, string faceName, int height)
+        {
             this.hFont = hFont;
             this.faceName = faceName;
             this.height = height;
@@ -22,18 +27,23 @@ namespace Fonet.Pdf.Gdi {
         /// <summary>
         ///     Class destructor
         /// </summary>
-        ~GdiFont() {
+        ~GdiFont()
+        {
             Dispose(false);
         }
 
-        public virtual void Dispose() {
+        public virtual void Dispose()
+        {
             Dispose(true);
             GC.SuppressFinalize(this);
         }
 
-        protected virtual void Dispose(bool disposing) {
-            if (disposing) {
-                if (hFont != IntPtr.Zero) {
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (hFont != IntPtr.Zero)
+                {
                     //Console.WriteLine("Dispoing of font {0}, {1}pt ({2})", faceName, height, hFont);
                     LibWrapper.DeleteObject(hFont);
                     hFont = IntPtr.Zero;
@@ -50,7 +60,8 @@ namespace Fonet.Pdf.Gdi {
         ///     cell or character.
         /// </param>
         /// <returns></returns>
-        public static GdiFont CreateFont(string faceName, int height, bool bold, bool italic) {
+        public static GdiFont CreateFont(string faceName, int height, bool bold, bool italic)
+        {
             LogFont lf = new LogFont();
             lf.lfCharSet = 1; // Default charset
             lf.lfFaceName = faceName;
@@ -67,7 +78,8 @@ namespace Fonet.Pdf.Gdi {
         /// </summary>
         /// <param name="faceName">The typeface name of a font.</param>
         /// <returns></returns>
-        public static GdiFont CreateDesignFont(string faceName, bool bold, bool italic, GdiDeviceContent dc) {
+        public static GdiFont CreateDesignFont(string faceName, bool bold, bool italic, GdiDeviceContent dc)
+        {
             // TODO: Is there a simpler method of obtaining the em-sqaure?
             GdiFont tempFont = GdiFont.CreateFont(faceName, 2048, bold, italic);
             dc.SelectFont(tempFont);
@@ -77,19 +89,23 @@ namespace Fonet.Pdf.Gdi {
             return CreateFont(faceName, -Math.Abs(metrics.EmSquare), bold, italic);
         }
 
-        public GdiFontMetrics GetMetrics(GdiDeviceContent dc) {
+        public GdiFontMetrics GetMetrics(GdiDeviceContent dc)
+        {
             return new GdiFontMetrics(dc, this);
         }
 
-        public string FaceName {
+        public string FaceName
+        {
             get { return faceName; }
         }
 
-        public int Height {
+        public int Height
+        {
             get { return height; }
         }
 
-        public IntPtr Handle {
+        public IntPtr Handle
+        {
             get { return hFont; }
         }
     }

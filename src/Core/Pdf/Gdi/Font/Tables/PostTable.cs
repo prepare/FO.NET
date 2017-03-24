@@ -1,13 +1,17 @@
+﻿//Apache2, 2017, WinterDev
+//Apache2, 2009, griffm, FO.NET
 using System;
 
-namespace Fonet.Pdf.Gdi.Font {
+namespace Fonet.Pdf.Gdi.Font
+{
     /// <summary>
     ///     Class that represents the PostScript ('post') table
     /// </summary>
     /// <remarks>
     ///     http://www.microsoft.com/typography/otspec/post.htm
     /// </remarks>
-    internal class PostTable : FontTable {
+    internal class PostTable : FontTable
+    {
         /// <summary>
         ///     0x00010000 for version 1.0 
         ///     0x00020000 for version 2.0 
@@ -66,17 +70,19 @@ namespace Fonet.Pdf.Gdi.Font {
         ///     Class constructor.
         /// </summary>
         /// <param name="entry"></param>
-        public PostTable(DirectoryEntry entry) : base(TableNames.Post, entry) {}
+        public PostTable(DirectoryEntry entry) : base(TableNames.Post, entry) { }
 
         /// <summary>
         ///     Gets a boolean value that indicates whether this font is 
         ///     proportionally spaced (fixed pitch) or not.
         /// </summary>
-        public bool IsFixedPitch {
+        public bool IsFixedPitch
+        {
             get { return (fixedPitch == 1); }
         }
 
-        public float ItalicAngle {
+        public float ItalicAngle
+        {
             get { return italicAngle; }
         }
 
@@ -85,12 +91,13 @@ namespace Fonet.Pdf.Gdi.Font {
         ///     at the current position.
         /// </summary>
         /// <param name="reader"></param>
-        protected internal override void Read(FontFileReader reader) {
+        protected internal override void Read(FontFileReader reader)
+        {
             FontFileStream stream = reader.Stream;
             version = stream.ReadFixed();
 
             // The italic angle is stored in the stupid fixed field format.
-            italicAngle = (float) stream.ReadFixed()/65536.0f;
+            italicAngle = (float)stream.ReadFixed() / 65536.0f;
 
             underlinePosition = stream.ReadFWord();
             underlineThickness = stream.ReadFWord();
@@ -101,7 +108,8 @@ namespace Fonet.Pdf.Gdi.Font {
             maxMemType1 = stream.ReadULong();
         }
 
-        protected internal override void Write(FontFileWriter writer) {
+        protected internal override void Write(FontFileWriter writer)
+        {
             throw new NotImplementedException("Write is not implemented.");
         }
     }

@@ -1,13 +1,17 @@
+﻿//Apache2, 2017, WinterDev
+//Apache2, 2009, griffm, FO.NET
 using System;
 using System.Collections;
 using System.IO;
 
-namespace Fonet.Pdf.Gdi {
+namespace Fonet.Pdf.Gdi
+{
     /// <summary>
     ///     Installs a collection of private fonts on the system and uninstalls 
     ///     them when disposed.
     /// </summary>
-    public class GdiPrivateFontCollection {
+    public class GdiPrivateFontCollection
+    {
         /// <summary>
         ///     Specifies that only the process that called the AddFontResourceEx 
         ///     function can use this font.
@@ -34,11 +38,14 @@ namespace Fonet.Pdf.Gdi {
         /// <seealso cref="AddFontFile(FileInfo)" />
         /// <exception cref="ArgumentNullException">If <i>filename</i> is null.</exception>
         /// <exception cref="ArgumentException">If <i>filename</i> is the empty string.</exception>
-        public void AddFontFile(string filename) {
-            if (filename == null) {
+        public void AddFontFile(string filename)
+        {
+            if (filename == null)
+            {
                 throw new ArgumentNullException("filename", "Parameter cannot be null");
             }
-            if (filename == String.Empty) {
+            if (filename == String.Empty)
+            {
                 throw new ArgumentException("filename", "Parameter cannot be empty string");
             }
 
@@ -60,14 +67,18 @@ namespace Fonet.Pdf.Gdi {
         /// <exception cref="ArgumentException">
         ///     If <i>fontFile</i> cannot be added to the system font collection.
         /// </exception>
-        public void AddFontFile(FileInfo fontFile) {
-            if (fontFile == null) {
+        public void AddFontFile(FileInfo fontFile)
+        {
+            if (fontFile == null)
+            {
                 throw new ArgumentNullException("fontFile", "Parameter cannot be null");
             }
-            if (!fontFile.Exists) {
+            if (!fontFile.Exists)
+            {
                 throw new FileNotFoundException("Font file does not exist", fontFile.FullName);
             }
-            if (fonts.Contains(fontFile.FullName)) {
+            if (fonts.Contains(fontFile.FullName))
+            {
                 throw new ArgumentException("Font file already exists", "fontFile");
             }
 
@@ -77,7 +88,8 @@ namespace Fonet.Pdf.Gdi {
 
             // AddFontResourceEx returns the number of fonts added which 
             // may be greater than 1 if adding a TrueType collection.
-            if (LibWrapper.AddFontResourceEx(absolutePath, FR_PRIVATE, 0) == 0) {
+            if (LibWrapper.AddFontResourceEx(absolutePath, FR_PRIVATE, 0) == 0)
+            {
                 throw new ArgumentException("Unable to add font file: " + absolutePath, "fontFile");
             }
         }

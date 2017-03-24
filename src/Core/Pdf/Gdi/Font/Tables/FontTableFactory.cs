@@ -1,14 +1,18 @@
+﻿//Apache2, 2017, WinterDev
+//Apache2, 2009, griffm, FO.NET
 using System;
 
-namespace Fonet.Pdf.Gdi.Font {
+namespace Fonet.Pdf.Gdi.Font
+{
     /// <summary>
     ///     Instantiates a font table from a table tag.
     /// </summary>
-    internal sealed class FontTableFactory {
+    internal sealed class FontTableFactory
+    {
         /// <summary>
         ///     Prevent instantiation since this is a factory class.
         /// </summary>
-        private FontTableFactory() {}
+        private FontTableFactory() { }
 
         /// <summary>
         ///     Creates an instance of a class that implements the FontTable interface.
@@ -23,9 +27,11 @@ namespace Fonet.Pdf.Gdi.Font {
         /// <exception cref="ArgumentException">
         ///     If a class capable of parsing <i>tableName</i> is not available.
         /// </exception>
-        public static FontTable Make(string tableName, FontFileReader reader) {
+        public static FontTable Make(string tableName, FontFileReader reader)
+        {
             DirectoryEntry entry = reader.GetDictionaryEntry(tableName);
-            switch (tableName) {
+            switch (tableName)
+            {
                 case TableNames.Head:
                     return new HeaderTable(entry);
                 case TableNames.Hhea:

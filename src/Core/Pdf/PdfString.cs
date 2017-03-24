@@ -1,3 +1,5 @@
+ï»¿//Apache2, 2017, WinterDev
+//Apache2, 2009, griffm, FO.NET
 using System.IO;
 using System.Text;
 using Fonet.Pdf.Security;
@@ -173,8 +175,8 @@ namespace Fonet.Pdf
         /// <remarks>
         ///     Strings may also be written in hexadecimal form; this is useful for 
         ///     including arbitrary binary data in a PDF file. A hexadecimal string 
-        ///     is written as a sequence of hexadecimal digits (0–9 and either A–F 
-        ///     or a–f) enclosed within angle brackets (&lt; and &gt;).
+        ///     is written as a sequence of hexadecimal digits (0ï¿½9 and either Aï¿½F 
+        ///     or aï¿½f) enclosed within angle brackets (&lt; and &gt;).
         /// </remarks>
         internal static byte[] ToPdfHexadecimal(byte[] preamble, byte[] data)
         {

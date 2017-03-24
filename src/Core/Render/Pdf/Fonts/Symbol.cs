@@ -1,14 +1,19 @@
-namespace Fonet.Render.Pdf.Fonts {
-    internal class Symbol : Base14Font {
+﻿//Apache2, 2017, WinterDev
+//Apache2, 2009, griffm, FO.NET
+namespace Fonet.Render.Pdf.Fonts
+{
+    internal class Symbol : Base14Font
+    {
         private static readonly int[] CodePointWidths;
 
         private static readonly CodePointMapping DefaultMapping
             = CodePointMapping.GetMapping("SymbolEncoding");
 
         public Symbol()
-            : base("Symbol", null, 1010, 1010, -293, 32, 255, CodePointWidths, DefaultMapping) {}
+            : base("Symbol", null, 1010, 1010, -293, 32, 255, CodePointWidths, DefaultMapping) { }
 
-        static Symbol() {
+        static Symbol()
+        {
             CodePointWidths = new int[256];
             CodePointWidths[0x0020] = 250;
             CodePointWidths[0x0021] = 333;

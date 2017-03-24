@@ -1,3 +1,5 @@
+﻿//Apache2, 2017, WinterDev
+//Apache2, 2009, griffm, FO.NET
 namespace Fonet.Fo.Properties {
     internal class GroupingSizeMaker : NumberProperty.Maker {
         new public static PropertyMaker Maker(string propName) {

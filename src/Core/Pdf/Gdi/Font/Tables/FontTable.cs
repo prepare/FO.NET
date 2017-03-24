@@ -1,10 +1,14 @@
+﻿//Apache2, 2017, WinterDev
+//Apache2, 2009, griffm, FO.NET
 using System;
 
-namespace Fonet.Pdf.Gdi.Font {
+namespace Fonet.Pdf.Gdi.Font
+{
     /// <summary>
     ///     Class derived by all TrueType table classes.
     /// </summary>
-    internal abstract class FontTable {
+    internal abstract class FontTable
+    {
         /// <summary>
         ///     The dictionary entry for this table.
         /// </summary>
@@ -15,14 +19,16 @@ namespace Fonet.Pdf.Gdi.Font {
         /// </summary>
         /// <param name="tableName">The table name.</param>
         /// <param name="entry">Table directory entry.</param>
-        public FontTable(string tableName, DirectoryEntry entry) {
+        public FontTable(string tableName, DirectoryEntry entry)
+        {
             this.directoryEntry = entry;
         }
 
         /// <summary>
         ///     Gets or sets a directory entry for this table.
         /// </summary>
-        public DirectoryEntry Entry {
+        public DirectoryEntry Entry
+        {
             get { return directoryEntry; }
             set { directoryEntry = value; }
         }
@@ -55,14 +61,16 @@ namespace Fonet.Pdf.Gdi.Font {
         ///     (e.g. 'cvt').  In this case the returned string will be padded 
         ///     with a extra space at the end of the string.
         /// </remarks>
-        public string Name {
+        public string Name
+        {
             get { return directoryEntry.TableName; }
         }
 
         /// <summary>
         ///     Gets the table name encoded as a 32-bit unsigned integer.
         /// </summary>
-        public uint Tag {
+        public uint Tag
+        {
             get { return directoryEntry.Tag; }
         }
     }

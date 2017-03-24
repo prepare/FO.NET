@@ -1,8 +1,12 @@
-namespace Fonet.Pdf.Gdi.Font {
+﻿//Apache2, 2017, WinterDev
+//Apache2, 2009, griffm, FO.NET
+namespace Fonet.Pdf.Gdi.Font
+{
     /// <summary>
     ///     A helper designed that provides the size of each TrueType primitives.
     /// </summary>
-    internal abstract class PrimitiveSizes {
+    internal abstract class PrimitiveSizes
+    {
         public const int Byte = 1;
         public const int Char = 1;
         public const int UShort = 2;

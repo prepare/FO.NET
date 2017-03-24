@@ -1,18 +1,23 @@
+﻿//Apache2, 2017, WinterDev
+//Apache2, 2009, griffm, FO.NET
 using System;
 
-namespace Fonet {
+namespace Fonet
+{
     /// <summary>
     ///     A class containing event data for the Error, Warning and Info 
     ///     events defined in <see cref="FonetDriver"/>.
     /// </summary>
-    public class FonetEventArgs : EventArgs {
+    public class FonetEventArgs : EventArgs
+    {
         private string message;
 
         /// <summary>
         ///     Initialises a new instance of the <i>FonetEventArgs</i> class.
         /// </summary>
         /// <param name="message">The text of the event message.</param>
-        public FonetEventArgs(string message) {
+        public FonetEventArgs(string message)
+        {
             this.message = message;
         }
 
@@ -20,7 +25,8 @@ namespace Fonet {
         ///     Retrieves the event message.
         /// </summary>
         /// <returns>A string which may be null.</returns>
-        public string GetMessage() {
+        public string GetMessage()
+        {
             return message;
         }
 
@@ -31,7 +37,8 @@ namespace Fonet {
         ///     A string representation of this class which is identical 
         ///     to <see cref="GetMessage"/>.
         /// </returns>
-        public override string ToString() {
+        public override string ToString()
+        {
             return GetMessage();
         }
     }

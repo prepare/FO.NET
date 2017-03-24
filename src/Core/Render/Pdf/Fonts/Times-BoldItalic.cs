@@ -1,14 +1,19 @@
-namespace Fonet.Render.Pdf.Fonts {
-    internal class TimesBoldItalic : Base14Font {
+﻿//Apache2, 2017, WinterDev
+//Apache2, 2009, griffm, FO.NET
+namespace Fonet.Render.Pdf.Fonts
+{
+    internal class TimesBoldItalic : Base14Font
+    {
         private static readonly int[] CodePointWidths;
 
         private static readonly CodePointMapping DefaultMapping
             = CodePointMapping.GetMapping("WinAnsiEncoding");
 
         public TimesBoldItalic()
-            : base("Times-BoldItalic", "WinAnsiEncoding", 669, 699, -205, 32, 255, CodePointWidths, DefaultMapping) {}
+            : base("Times-BoldItalic", "WinAnsiEncoding", 669, 699, -205, 32, 255, CodePointWidths, DefaultMapping) { }
 
-        static TimesBoldItalic() {
+        static TimesBoldItalic()
+        {
             CodePointWidths = new int[256];
             CodePointWidths[0x0041] = 667;
             CodePointWidths[0x00C6] = 944;
