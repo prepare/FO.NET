@@ -4,12 +4,30 @@ namespace Fonet.Pdf
 {
     public abstract class PdfObject
     {
+
+#if DEBUG
+        static int dbugTotal;
+        public readonly int dbugId = dbugTotal++;
+#endif
         private PdfObjectId objectId;
 
-        public PdfObject() { }
+        public PdfObject()
+        {
+#if DEBUG
+            //if (dbugId == 142 || dbugId == 153)
+            //{
+
+            //}
+#endif
+        }
 
         public PdfObject(PdfObjectId objectId)
         {
+#if DEBUG
+            //if (dbugId == 142 || dbugId == 153)
+            //{ 
+            //}
+#endif
             this.objectId = objectId;
         }
 
