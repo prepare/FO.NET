@@ -6,3 +6,5 @@ license: Apache2
 
 wiki: https://github.com/prepare/FO.NET/wiki/1.-XSL-FO
 
+---
+see new development at https://github.com/PaintLab/SaveAsPdf
